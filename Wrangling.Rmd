@@ -1,0 +1,98 @@
+Needed Packages
+```{r}
+library(tidyverse)
+library(kableExtra)
+library(dplyr)
+library(zoo)
+```
+Shreya's Code
+
+```{r}
+#CSV to table
+rawHDItable <- read.csv("data/HDR21-22Table 1.csv", skip =6, head = TRUE)
+colnames(rawBudget)[1:7] <- rawBudget[2,]
+
+wrangling <- rawBudget %>% mutate(clubType = NA)
+i <- 1
+while(i <= nrow(wrangling)){
+  if(wrangling[i,1] == "" & wrangling[i,2] == "" & wrangling[i,3] == "" & i+1 <= nrow(wrangling)){
+    wrangling$clubType[i+1] = wrangling$`Line Item`[i+1]
+  }
+  i <- i+1
+}
+wrangling$clubType[1] = "Activism"
+wrangling1 <- wrangling %>% 
+  mutate(clubType = na.locf(clubType, na.rm = F)) %>%
+  select(-c(Spent, Remaining, X.6, X.7)) %>% 
+  filter(nchar(`Line Item`) != 1) %>% 
+  filter(`Line Item` != "Line Item") %>% 
+  filter(`Line Item` != "")
+
+wrangling2 <- wrangling1[-c(11, 17, 35, 36, 57,68,77,78,83), ]
+
+wrangling3 <- wrangling2 %>% 
+  mutate(Club = case_when(`Line Item` != "Total" ~`Line Item`)) %>% 
+  mutate(Club = na.locf(Club, na.rm = F)) %>% 
+  filter(`Line Item` == "Total") %>% 
+  select(Club, Requested, Recommended, Allocated, clubType)
+```
+Victor's Code
+Hard coding hard to fix errors and changing the values to numeric type
+```{r}
+#Here I hard code lines that were giving us trouble before because the club
+#names were in the wrong column (clubs are SASA, Rugby, Rowing Assoc., and 
+#Archery)
+wrangling3 <- wrangling3 %>% 
+  add_row(Club = "South Asian Students Association", Requested = "$3730.00", Recommended = "$2810.00", Allocated = "$2810.00",clubType = "Affinity") %>%
+  add_row(Club = "Rugby", Requested = "$900.00", Recommended = "$900.00", Allocated = "$900.00",clubType = "Club Sports") %>%
+  mutate(Club = replace(Club, Club == "Club Sports","Archery Club")) %>%
+  add_row(Club = "Amherst College Rowing Association", Requested = "$38730.00", Recommended = "$33202.78", Allocated = "$33202.78", clubType = "Club Sports")
+#Here I take out the dollar signs and cast the values in columns Requested,
+#Recommended, and Allocated as numeric values
+wrangling3$Requested = as.numeric(gsub("[\\$,]", "", wrangling3$Requested))
+wrangling3$Recommended = as.numeric(gsub("[\\$,]", "", wrangling3$Recommended))
+wrangling3$Allocated = as.numeric(gsub("[\\$,]", "", wrangling3$Allocated))
+#Put wrangling3 in the form of a csv called wrangledBudget.csv in the folder,
+#dat
+write.csv(wrangling3, "data/wrangledBudget.csv", row.names = FALSE)
+```
+
+
+Jesse's Code
+```{r}
+colnames(rawBudget)[1:7] <- rawBudget[2,] #(Thanks for this Victor)
+
+first_budget <- rawBudget %>%
+  select(`Line Item`, `Description`, `Allocated`) %>%
+  mutate(advance_row = lead(`Allocated`))
+
+first_budget[first_budget == ""] <- NA
+
+#This was the hardest part of the data wrangling. The most important idea was to use the lead function in combination with consistent patterns in the data set. It was possible to combine the lead function with the word "Allocated" in the data set to find winnow down the data to the desired form. Using the na.locf function was also crucial: it allowed me to bring the budget of each club into proximity with the word "Allocated" associated with that club's budget.
+second_budget <- first_budget %>%
+  mutate(Allocated_cf = na.locf(`Allocated`, na.rm = FALSE)) %>%
+  mutate(Advance_Allocated_cf = lead(Allocated_cf)) %>%
+  mutate(second_advance_row = lead(advance_row)) %>%
+  filter(Description == "Total" | `Line Item` == "Total" | advance_row == "Allocated" | second_advance_row == "Allocated") %>%
+  select(`Line Item`, Allocated) %>%
+  fill(Allocated, .direction = "up") %>%
+  filter(!`Line Item` %in% c("Total", NA))
+```
+
+```{r}
+#Here, I had to hardcode a few minor changes into the data set. The procedure I used to identify clubs and the money allocated to them (in the code chunk above) inadvertently identified several club categories as clubs themselves. Below, I remove these. There were also a few instances in which my procedure either misidentified or mislabeled a club or its budget.
+third_budget <- second_budget %>%
+  #Removes 4 categories of club which were mistakenly interpreted as clubs
+  filter(!`Line Item` %in% c("Affinity", "Recreational", "Religious", "Publications")) %>%
+  #Add back the South Asian Students Association and Rugby clubs which were dropped
+  add_row(`Line Item` = "South Asian Students Association", Allocated = "$2810.00") %>%
+  add_row(`Line Item` = "Rugby", Allocated = "$900.00") %>%
+  #Changes the value in the electronics club to the proper value
+  mutate(`Allocated` = replace(`Allocated`, `Allocated` == "$267.00", "$152.00")) %>%
+  #The Archery Club was given the name "Club Sports" which is one of the categories of club.
+  mutate(`Line Item` = replace(`Line Item`, `Line Item` == "Club Sports","Archery Club"))
+
+```
+
+
+
