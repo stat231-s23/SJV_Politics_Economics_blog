@@ -9,7 +9,17 @@ Shreya's Code
 
 ```{r}
 #CSV to table
-rawHDItable <- read.csv("data/HDR21-22Table 1.csv", skip =6, head = TRUE)
+#Bringing all the data sets into R.
+HDItable <- read.csv("data/HDR21-22Table 1.csv", skip =6, head = TRUE)
+oecdAbbreviations <- read.csv("data/oecdAbbreviations.csv")
+oecdUnemploymentData <- read.csv("data/oecdWorldUnemploymentData.csv")
+
+
+#found colnames function here: https://www.projectpro.io/recipes/change-column-headers-of-dataframe-r#:~:text=How%20to%20change%20column%20headers%20of%20a%20data%2Dframe%20in,can%20be%20changed%20at%20once.
+colnames(HDItable) <- c("HDI rank", "Country", "Human Development Index", "Empty", "Life Expectancy at Birth (years)", "Empty", "Expected Years of Schooling")
+
+HDItable <- select(HDItable, "HDI rank", "Country", "Human Development Index", "Life Expectancy at Birth (years)", "Expected Years of Schooling")
+
 colnames(rawBudget)[1:7] <- rawBudget[2,]
 
 wrangling <- rawBudget %>% mutate(clubType = NA)
