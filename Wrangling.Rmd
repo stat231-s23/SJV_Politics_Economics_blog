@@ -18,7 +18,18 @@ oecdUnemploymentData <- read.csv("data/oecdWorldUnemploymentData.csv")
 #found colnames function here: https://www.projectpro.io/recipes/change-column-headers-of-dataframe-r#:~:text=How%20to%20change%20column%20headers%20of%20a%20data%2Dframe%20in,can%20be%20changed%20at%20once.
 colnames(HDItable) <- c("HDI rank", "Country", "Human Development Index", "Empty", "Life Expectancy at Birth (years)", "Empty", "Expected Years of Schooling")
 
-HDItable <- select(HDItable, "HDI rank", "Country", "Human Development Index", "Life Expectancy at Birth (years)", "Expected Years of Schooling")
+#This is the HDItable in a nice format
+HDItable <- select(HDItable, "HDI rank", "Country", "Human Development Index", "Life Expectancy at Birth (years)", "Expected Years of Schooling") %>% 
+  slice(1:195) %>% 
+  drop_na()
+
+#Only want the two columns with country names and codes
+Abbreviations <- oecdAbbreviations %>% 
+  select("CODE", "Country")
+
+#Now I want to join the oecd abbreviations to the countries in the HDItable.
+HDItable2 <- HDItable %>%
+  left_join(Abbreviations, by = c("Country" = "Country"))
 
 colnames(rawBudget)[1:7] <- rawBudget[2,]
 
