@@ -36,7 +36,7 @@ HDItable2 <- HDItable %>%
 Unemployment2021 <- oecdUnemploymentData %>%
   filter(TIME == "2021")
 
-#This is not working out very nicely
+#This part is not working out very nicely.
 HDItable3 <- HDItable2 %>%
   merge(Unemployment2021, by = c("CODE" = "LOCATION"))
 ```
