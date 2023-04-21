@@ -12,8 +12,8 @@ Shreya's Code
 #Bringing all the data sets into R.
 HDItable <- read.csv("data/HDR21-22Table 1.csv", skip =6, head = TRUE)
 oecdAbbreviations <- read.csv("data/oecdAbbreviations.csv")
-oecdUnemploymentData <- read.csv("data/oecdWorldUnemploymentData.csv")
-
+UnemploymentTotal2021 <- read.csv(header = TRUE, skip = 3, "data/2021WorldBankUnemploymentData.csv")
+UnemploymentWomen2021 <- read.csv(header = TRUE, skip = 3, "data/2021WorldBankUnemploymentDataWomen.csv")
 
 #found colnames function here: https://www.projectpro.io/recipes/change-column-headers-of-dataframe-r#:~:text=How%20to%20change%20column%20headers%20of%20a%20data%2Dframe%20in,can%20be%20changed%20at%20once.
 colnames(HDItable) <- c("HDI rank", "Country", "Human Development Index", "Empty", "Life Expectancy at Birth (years)", "Empty", "Expected Years of Schooling")
@@ -23,7 +23,15 @@ HDItable <- select(HDItable, "HDI rank", "Country", "Human Development Index", "
   slice(1:195) %>% 
   drop_na()
 
-#Only want the two columns with country names and codes
+UnemploymentTotal2 <- UnemploymentTotal2021 %>%
+  select(Country.Name, Country.Code, X2021) %>%
+  drop_na()
+
+UnemploymentWomen2 <- UnemploymentWomen2021 %>%
+  select(Country.Name, Country.Code, X2021) %>%
+  drop_na()
+
+#Only want the two columns with country names and codes.
 Abbreviations <- oecdAbbreviations %>% 
   select("CODE", "Country")
 
@@ -32,11 +40,16 @@ HDItable2 <- HDItable %>%
   left_join(Abbreviations, by = c("Country" = "Country")) %>%
   drop_na()
 
-#We are only interested in the data from 2021
-Unemployment2021 <- oecdUnemploymentData %>%
-  filter(TIME == "2021")
 
 #This part is not working out very nicely.
 HDItable3 <- HDItable2 %>%
-  merge(Unemployment2021, by = c("CODE" = "LOCATION"))
+  left_join(UnemploymentTotal2, by = c("CODE" = "Country.Code")) %>%
+  left_join(UnemploymentWomen2, by = c("CODE" = "Country.Code")) %>% 
+  mutate(Total = X2021.x) %>%
+    select(-(`X2021.x`)) %>%
+  mutate(women = X2021.y) %>%
+  select(-(X2021.y)) %>%
+  select(-(Country.Name.x)) %>%
+  select(-(Country.Name.y))
+
 ```
