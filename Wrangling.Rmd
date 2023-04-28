@@ -51,5 +51,5 @@ HDItable3 <- HDItable2 %>%
   select(-(X2021.y)) %>%
   select(-(Country.Name.x)) %>%
   select(-(Country.Name.y))
-
+write.csv(HDItable3, "data/wrangled.csv")
 ```
