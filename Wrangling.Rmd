@@ -60,6 +60,8 @@ write.csv(HDItable3, "data/wrangled.csv")
 ```{r}
 #SHREYA
 library(readxl)
+library(factoextra)
+library(cluster)
 
 #importing the dataset
 GIIraw <- read_excel("data/GII.xlsx", col_names = TRUE, skip = 2)
@@ -78,6 +80,53 @@ class(GII$`GII Value`)
 GII$`GII Value` <- as.numeric(GII$`GII Value`)
 round(GII$`GII Value`, digits = 1)
 
-HDI
+HDI <- HDItable3 %>% 
+  select("Country", "Human Development Index")
+
+#joining the previously wrangled hdi values with GII valus
+GIIHDI <- HDI %>% 
+  left_join(GII, by = "Country")
+
+
+#ELBOWPLOT
+#standardising
+matrix <- data.matrix(GIIHDI$`GII Value`)
+matrix <- matrix[complete.cases(matrix), ]
+matrix <- scale(matrix)
+
+#clustering 
+k_max <- 10
+set.seed(180)
+wss <- numeric(k_max)
+for(k in 1:k_max) {
+  km_res <- kmeans(matrix, k)
+  wss[k] <- sum(km_res$withinss)
+}
+
+#plot the elbow curve
+fviz_nbclust(matrix, kmeans, method = "wss", k.max = k_max, nstart = 25) +
+  labs(title = "Elbow plot for GII values", x = "Number of clusters", y = "Within-cluster sum of squares") +
+  geom_vline(xintercept = 3, linetype = "dashed", color = "red")
+
+
+#cluster graph
+# Add cluster assignment to the data frame
+k_max <- 3
+set.seed(180)
+wss <- numeric(k_max)
+for(k in 1:k_max) {
+  km_res <- kmeans(matrix, k)
+  wss[k] <- sum(km_res$withinss)
+}
+
+GIIHDI <- drop_na(GIIHDI)
+GIIHDI$cluster <- as.factor(km_res$cluster)
+
+# Plot the clusters
+ggplot(GIIHDI, aes(x = `HDI rank`, y = `GII Value`, color = cluster)) +
+  geom_point(size = 3) +
+  labs(title = "Cluster plot for GII values", x = "HDI Rank", y = "GII Value") +
+  theme_minimal()
 ```
+
 
