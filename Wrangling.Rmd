@@ -5,7 +5,6 @@ library(kableExtra)
 library(dplyr)
 library(zoo)
 ```
-Shreya's Code
 
 ```{r}
 #CSV to table
@@ -53,3 +52,27 @@ HDItable3 <- HDItable2 %>%
   select(-(Country.Name.y))
 write.csv(HDItable3, "data/wrangled.csv")
 ```
+
+```{r}
+#SHREYA
+library(readxl)
+
+#importing the dataset
+GIIraw <- read_excel("data/GII.xlsx", col_names = TRUE, skip = 2)
+
+#removing the na values plus selecting relevant columns
+GII <- GIIraw %>% 
+  select(...1, ...2, ...3, ...5) %>% 
+  drop_na()
+
+#renaming the columns
+colnames(GII) <- c("HDI rank", "Country", "GII Value", "GII Rank")
+
+#check the type of value for the column. apparently its charecter
+class(GII$`GII Value`)
+#hence converting to numeric before rounding the column
+GII$`GII Value` <- as.numeric(GII$`GII Value`)
+round(GII$`GII Value`, digits = 1)
+
+```
+
