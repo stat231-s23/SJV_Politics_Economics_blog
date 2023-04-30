@@ -74,5 +74,6 @@ class(GII$`GII Value`)
 GII$`GII Value` <- as.numeric(GII$`GII Value`)
 round(GII$`GII Value`, digits = 1)
 
+HDI
 ```
 
