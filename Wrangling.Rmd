@@ -13,6 +13,9 @@ HDItable <- read.csv("data/HDR21-22Table 1.csv", skip =6, head = TRUE)
 oecdAbbreviations <- read.csv("data/oecdAbbreviations.csv")
 UnemploymentTotal2021 <- read.csv(header = TRUE, skip = 3, "data/2021WorldBankUnemploymentData.csv")
 UnemploymentWomen2021 <- read.csv(header = TRUE, skip = 3, "data/2021WorldBankUnemploymentDataWomen.csv")
+LiteracyRate2023 <- read.csv("data/LiteracyRate2023.csv")
+
+Literacy <- select(LiteracyRate2023, "growthRate", "country", "region", "rank", "latestRate", "dataYear", "pop2023", "landAreaKm", "density")
 
 #found colnames function here: https://www.projectpro.io/recipes/change-column-headers-of-dataframe-r#:~:text=How%20to%20change%20column%20headers%20of%20a%20data%2Dframe%20in,can%20be%20changed%20at%20once.
 colnames(HDItable) <- c("HDI rank", "Country", "Human Development Index", "Empty", "Life Expectancy at Birth (years)", "Empty", "Expected Years of Schooling")
@@ -49,7 +52,8 @@ HDItable3 <- HDItable2 %>%
   mutate(women = X2021.y) %>%
   select(-(X2021.y)) %>%
   select(-(Country.Name.x)) %>%
-  select(-(Country.Name.y))
+  select(-(Country.Name.y)) %>%
+  left_join(Literacy, by = c("Country" = "country"))
 write.csv(HDItable3, "data/wrangled.csv")
 ```
 
