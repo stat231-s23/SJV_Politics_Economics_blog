@@ -1,50 +1,58 @@
 library(shiny)
 library(tidyverse)
+library(cartogram)
 
-#load data
-GIIHDI <- read_csv("data/GIIHDI.csv")
+# Load data
+GIIHDI <- read.csv("/Users/shreyasusanmathew/Desktop/STAT 231/SJV_Politics_Economics_blog/Women/GIIHDI.csv")
 
-#defining names of the variables
-hist_choice_values <- c("price","range","top_speed","weight","battery")
-hist_choice_names <- c("Price","Range","Top Speed","Weight","Battery")
-names(hist_choice_values) <- hist_choice_names
+# Define names of the variables
+indicator_choice_values <- c("Adol_birthrate", "Parliament", "Secondary", "LF_Part")
+indicator_choice_names <- c("Adolescent Birthrate", "Political Participation", "Secondary Education", "Labor Force Participation")
+names(indicator_choice_values) <- indicator_choice_names
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-
-    # Application title
-    titlePanel("Women Empowerment"),
-
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-          selectInput(inputId = "cartograph"
-                      , label = "Choose an Indicator:"
-                      , choices = hist_choice_values
-                      , selected = "price"),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
-           )
-        ) 
+  
+  # Application title
+  titlePanel("Women Empowerment"),
+  
+  # Sidebar with a slider input for number of bins 
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(inputId = "indicator",
+                  label = "Choose an Indicator:",
+                  choices = indicator_choice_values,
+                  selected = "Adol_birthrate")
+    ),
+    
+    # Show a plot of the generated distribution
+    mainPanel(
+      cartogramOutput("cartogram")
     )
+  )
 )
 
-# Define server logic required to draw a histogram
+# Define server logic required to generate cartogram plot
 server <- function(input, output) {
-
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
-    })
+  
+  # Create reactive expression for cartogram data
+  carto_data <- reactive({
+    # Subset data based on selected indicator
+    selected_var <- input$indicator
+    subset(GIIHDI, select = c("ISO_Code", selected_var))
+  })
+  
+  # Generate cartogram plot
+  output$cartogram <- renderCartogram({
+    cartogram(
+      data = carto_data(),
+      projection = "mercator",  # Choose map projection
+      weight = input$indicator,  # Choose variable to weight by
+      group = "ISO_Code",  # Specify country grouping variable
+      itermax = 5  # Set maximum number of iterations for cartogram algorithm
+    )
+  })
 }
 
-# Run the application 
-shinyApp(ui = ui, server = server)
+# Run the app
+shinyApp(ui, server)
