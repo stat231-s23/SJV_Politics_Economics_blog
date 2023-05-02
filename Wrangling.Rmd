@@ -123,10 +123,28 @@ GIIHDI <- drop_na(GIIHDI)
 GIIHDI$cluster <- as.factor(km_res$cluster)
 
 # Plot the clusters
-ggplot(GIIHDI, aes(x = `HDI rank`, y = `GII Value`, color = cluster)) +
+ggplot(GIIHDI, aes(x = `Human Development Index`, y = `GII Value`, color = cluster)) +
   geom_point(size = 3) +
-  labs(title = "Cluster plot for GII values", x = "HDI Rank", y = "GII Value") +
+  labs(title = "Cluster plot for GII values", x = "GII value") +
   theme_minimal()
+```
+```{r}
+location_raw <- read.csv("data/location.csv", head = TRUE)
+
+location <- location_raw %>% 
+  select("country_code", "latitude", "longitude", "country") %>% 
+  rename("Country" = "country")
+
+GIIHDILocation <- GIIHDI %>% 
+  left_join(location, by ="Country")
+
+#cluster based on location
+
+ggplot(GIIHDILocation, aes(x = longitude, y = latitude, fill = `HDI rank`)) +
+  geom_point(alpha = 0.5)  + 
+  scale_color_brewer(palette = "Set2")
+
+
 ```
 
 
