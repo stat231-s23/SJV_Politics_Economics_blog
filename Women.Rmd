@@ -39,7 +39,6 @@ GIIHDI <- GII %>%
 ```
 ```{r}
 #Adding adoloscent birth rate
-
 Adoloscent_birth <- GIIraw %>% 
   select("...2", "SDG3.7")
 
@@ -52,7 +51,6 @@ GIIHDI <- GIIHDI %>%
 
 ```{r}
 #Adding Share of seats in parliament
-
 Parliament <- GIIraw %>% 
   select("...2", "SDG5.5")
 
@@ -64,7 +62,6 @@ GIIHDI <- GIIHDI %>%
 
 ```{r}
 #Adding Population of women with at least some secondary education
-
 Secondary <- GIIraw %>% 
   select("...2", "SDG4.4")
 
@@ -76,7 +73,6 @@ GIIHDI <- GIIHDI %>%
 
 ```{r}
 #Adding Labour Force participation
-
 LabourForce <- GIIraw %>% 
   select("...2", "...17")
 
