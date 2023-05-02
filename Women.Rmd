@@ -6,6 +6,7 @@ library(zoo)
 library(readxl)
 library(factoextra)
 library(cluster)
+library(cartogram)
 ```
 
 ```{r}
@@ -81,4 +82,9 @@ colnames(LabourForce) <- c("Country", "LF_Part")
 GIIHDI <- GIIHDI %>% 
   left_join(LabourForce, by = "Country")
 ```
+
+```{r}
+write.csv(GIIHDI, "GIIHDI.csv", row.names = FALSE)
+```
+
 
