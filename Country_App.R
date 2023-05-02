@@ -7,7 +7,7 @@ library(igraph)
 library(ggnetwork)
 
 
-unempData <- read_csv("data/wrangled.csv")
+unempData <- read.csv("data/wrangled.csv")
 countries <- unique(unempData$Country)
 
 ############
@@ -22,13 +22,16 @@ ui <-  navbarPage(
   #with check boxes to choose what types of clubs you would like to 
   #display in the graph
   tabPanel(
-    title = "Fund Distribution",
+    title = "Education",
     sidebarLayout(
       sidebarPanel(
-        checkboxGroupInput(inputId = "networkG",
+        sliderInput(inputId = "eduScatter",
                            label = "Club Types",
-                           choices = types,
-                           selected = types
+                           min = 0,
+                           max = 1,
+                    value = 1,
+                    step = 0.05
+                    
         )
       ),
       mainPanel(

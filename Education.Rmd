@@ -1,0 +1,36 @@
+---
+title: "An Analysis on Education Among Countries of Different HDI Ratings"
+author: "Jesse, Shreya, Victor"
+date: "05/02"
+output:
+  rmdformats::readthedown:
+    highlight: "Victor"
+---
+Packages
+```{r}
+library(shiny)
+library(dplyr)
+library(sf)
+library(viridis)
+library(maps)
+library(ggplot2)
+library(purrr)
+```
+
+```{r}
+unempData <- read.csv("data/wrangled.csv")
+```
+
+```{r}
+unempData %>% ggplot(aes(x = Expected.Years.of.Schooling, y = Human.Development.Index)) + geom_point( aes(color = region)) + geom_smooth(method='lm')
+```
+
+```{r}
+world_map2 <- maps::map("world", plot = FALSE, fill = TRUE) %>%
+  st_as_sf()
+
+ggplot(world_map2, aes(geometry=geom)) +
+  geom_sf(fill = "lightgrey", color = "white") +
+  theme_void()
+
+```
