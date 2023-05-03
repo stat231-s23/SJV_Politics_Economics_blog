@@ -15,6 +15,7 @@ library(viridis)
 library(maps)
 library(ggplot2)
 library(purrr)
+library(giscoR)
 ```
 
 ```{r}
@@ -22,15 +23,25 @@ unempData <- read.csv("data/wrangled.csv")
 ```
 
 ```{r}
-unempData %>% ggplot(aes(x = Expected.Years.of.Schooling, y = Human.Development.Index)) + geom_point( aes(color = region)) + geom_smooth(method='lm')
+lm_eqn <- function(df){
+    m <- lm(Human.Development.Index ~ Expected.Years.of.Schooling, df);
+    eq <- substitute(italic(y) == a + b %.% italic(x)*","~~italic(r)^2~"="~r2, 
+         list(a = format(unname(coef(m)[1]), digits = 2),
+              b = format(unname(coef(m)[2]), digits = 2),
+             r2 = format(summary(m)$r.squared, digits = 3)))
+    as.character(as.expression(eq));
+}
+unempData1 <- unempData
+unempData1 %>% ggplot(aes(x = Expected.Years.of.Schooling, y = Human.Development.Index)) + geom_point( aes(color = region)) +
+  geom_smooth(method='lm') +
+  geom_text(x = 12, y = 1.1, label = lm_eqn(unempData1), parse = TRUE) 
+
 ```
 
 ```{r}
-world_map2 <- maps::map("world", plot = FALSE, fill = TRUE) %>%
-  st_as_sf()
-
-ggplot(world_map2, aes(geometry=geom)) +
-  geom_sf(fill = "lightgrey", color = "white") +
+gisco_countries <- gisco_get_countries() %>% select(-c(CNTR_ID, CNTR_NAME ,NAME_ENGL))
+unempData2 <- unempData1 %>% full_join(gisco_countries, by = c("CODE" = "ISO3_CODE"))
+ggplot(unempData2, aes(geometry=geometry, fill = Human.Development.Index)) +
+  geom_sf() +
   theme_void()
-
 ```

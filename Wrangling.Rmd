@@ -39,8 +39,8 @@ Abbreviations <- oecdAbbreviations %>%
 
 #Now I want to join the oecd abbreviations to the countries in the HDItable.
 HDItable2 <- HDItable %>%
-  left_join(Abbreviations, by = c("Country" = "Country")) %>%
-  drop_na()
+  left_join(Abbreviations, by = contains("Country", "Country"))
+unmatched <- as.list(HDItable2 %>% filter(is.na(CODE)) %>% select(Country))
 
 
 #This part is not working out very nicely.

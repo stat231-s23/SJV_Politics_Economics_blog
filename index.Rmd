@@ -1,7 +1,7 @@
 ---
-title: "Your Project Title Here"
-author: "Your team member names here"
-date: "Add a date"
+title: "Exploring Factors that Contribute to Country Development"
+author: "Jesse, Shreya, Victor"
+date: "05/03/2023"
 output:
   rmdformats::readthedown:
     highlight: "kate"
@@ -17,7 +17,13 @@ options(knitr.kable.NA = '')
 
 # Load packages
 library(tidyverse)
-
+library(dplyr)
+library(sf)
+library(viridis)
+library(maps)
+library(ggplot2)
+library(purrr)
+library(giscoR)
 ```
 
 # Intro
@@ -33,18 +39,22 @@ This is an R Markdown blog template. This document will be knit to HTML to produ
 3. Commit and push changes when you are ready. The website may take a couple minutes to update automatically after the push, but you may need to clear your browser's cache or view the page in a private/incognito window to see the changes more quickly. 
 
 
-# Content
-
 You can include text, `code`, and output as usual. Remember to take full advantage of Markdown and follow our [Style Guide](https://acstat231-f22.github.io/home/style-guide.html#Text_narration).
 
-```{r ggplot-example, fig.align="left", out.width="100%"}
-ggplot(data = cars, aes(x = speed, y = dist)) + 
-  geom_point() + 
-  labs(x = "Speed of car (mph)",
-       y = "Distance taken to stop (ft)",
-       title = "Stopping distance increases with faster speeds",
-       subtitle = "Based on 1920s study") +
-  theme_classic()
+```{r, fig.align="left", out.width="100%"}
+unempData <- read.csv("data/wrangled.csv")
+gisco_countries <- gisco_get_countries() %>% select(-c(CNTR_ID, CNTR_NAME ,NAME_ENGL))
+unempData2 <- unempData %>% full_join(gisco_countries, by = c("CODE" = "ISO3_CODE"))
+ggplot(unempData2, aes(geometry=geometry, fill = Human.Development.Index)) +
+  geom_sf() +
+  scale_fill_viridis(option = "turbo", direction = -1) + 
+  theme_void() + 
+  labs(
+    fill = "HDI",
+    title = "Human Development Index (HDI) of Countries",
+    subtitle = "2021",
+    caption = "Source: World Bank"
+  )
 ```
 
 Examples and additional guidance are provided below. 
@@ -52,12 +62,31 @@ Examples and additional guidance are provided below.
 Take note of the the default code chunk options in the `setup` code chunk. For example, unlike the rest of the Rmd files we worked in this semester, the default code chunk option is `echo = FALSE`, so you will need to set `echo  = TRUE` for any code chunks you would like to display in the blog. You should be thoughtful and intentional about the code you choose to display. 
 
 
-## Links 
+# Education 
 
 You can include [links](https://www.datadreaming.org/post/r-markdown-theme-gallery/) using Markdown syntax as shown. 
 
 You should include links to relevant sites as you write. You should additionally include a list of references as the end of your blog with full citations (and relevant links).
+```{r, fig.align="left", out.width="100%"}
+lm_eqn <- function(df){
+    m <- lm(Human.Development.Index ~ Expected.Years.of.Schooling, df);
+    eq <- substitute(italic(y) == a + b %.% italic(x)*","~~italic(r)^2~"="~r2, 
+         list(a = format(unname(coef(m)[1]), digits = 2),
+              b = format(unname(coef(m)[2]), digits = 2),
+             r2 = format(summary(m)$r.squared, digits = 3)))
+    as.character(as.expression(eq));
+}
+unempData1 <- unempData %>% na.omit(region)
+unempData1 %>% ggplot(aes(x = Expected.Years.of.Schooling, y = Human.Development.Index)) + geom_point( aes(color = region)) +
+  geom_smooth(method='lm') +
+  geom_text(x = 12, y = 1.1, label = lm_eqn(unempData1), parse = TRUE) +
+  labs(
+    x = "Expected Years of Schooling",
+    y = "Human Development Index",
+    color = "Continent"
+  )
 
+```
 
 ## Visualizations 
 
