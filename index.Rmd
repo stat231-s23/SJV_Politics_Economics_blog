@@ -107,7 +107,7 @@ Any Shiny apps embedded in your blog should be accompanied by the link to the pu
 
 ```{r ds-salaries-app, out.width = "100%", out.extra = 'data-external="1" frameborder="no"', fig.cap = "[Data Science Salaries Shiny App](https://bebailey.shinyapps.io/data-science-salaries)"}
 knitr::include_app("https://bebailey.shinyapps.io/data-science-salaries",
-                   height = "500px")
+                   height = "300px")
 ```
 
 

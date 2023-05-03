@@ -1,0 +1,156 @@
+```{r}
+library(tidyverse)
+library(kableExtra)
+library(dplyr)
+library(zoo)
+library(readxl)
+library(factoextra)
+library(cluster)
+library(cartogram)
+```
+
+```{r}
+#CREATING THE TABLE WITH ALL VALUES I NEED
+
+#importing the GII dataset
+GIIraw <- read_excel("data/GII.xlsx", col_names = TRUE, skip = 2)
+
+#removing the na values plus selecting relevant columns
+GII <- GIIraw %>% 
+  select(...1, ...2, ...3, ...5) %>% 
+  drop_na()
+#renaming the columns
+colnames(GII) <- c("HDI_rank", "Country", "GII_value", "GII_rank")
+#check the type of value for the column. apparently its charecter
+class(GII$`GII Value`)
+#hence converting to numeric before rounding the column
+GII$`GII_value` <- as.numeric(GII$`GII_value`)
+round(GII$`GII_value`, digits = 1)
+
+#importing HDI table
+HDI_raw <- read.csv("data/HDR21-22Table 1.csv", skip =6, head = TRUE)
+
+HDI <- HDI_raw %>% 
+  select("X.1", "X2021")
+colnames(HDI) <- c("Country", "HDI_value")
+
+GIIHDI <- GII %>% 
+  left_join(HDI, by = "Country") %>% 
+  select("Country", "HDI_value", "HDI_rank", "GII_value", "GII_rank") #rearranging columns
+```
+```{r}
+#Adding adoloscent birth rate
+Adoloscent_birth <- GIIraw %>% 
+  select("...2", "SDG3.7")
+
+colnames(Adoloscent_birth) <- c("Country", "Adol_birthrate")
+
+GIIHDI <- GIIHDI %>% 
+  left_join(Adoloscent_birth, by = "Country")
+  
+```
+
+```{r}
+#Adding Share of seats in parliament
+Parliament <- GIIraw %>% 
+  select("...2", "SDG5.5")
+
+colnames(Parliament) <- c("Country", "Parliament")
+
+GIIHDI <- GIIHDI %>% 
+  left_join(Parliament, by = "Country")
+```
+
+```{r}
+#Adding Population of women with at least some secondary education
+Secondary <- GIIraw %>% 
+  select("...2", "SDG4.4")
+
+colnames(Secondary) <- c("Country", "Secondary")
+
+GIIHDI <- GIIHDI %>% 
+  left_join(Secondary, by = "Country")
+```
+
+```{r}
+#Adding Labour Force participation
+LabourForce <- GIIraw %>% 
+  select("...2", "...17")
+
+colnames(LabourForce) <- c("Country", "LF_Part")
+
+GIIHDI <- GIIHDI %>% 
+  left_join(LabourForce, by = "Country")
+```
+
+```{r}
+write.csv(GIIHDI, "GIIHDI.csv", row.names = FALSE)
+```
+
+```{r}
+###Cartograph###
+
+library(tidyverse)
+library(sf)
+library(viridis)
+library(maptools)
+library(cartogram)
+library(ggplot2)
+library(patchwork)
+library(broom)
+library(tmap)
+library(rayshader)
+```
+
+```{r}
+
+world_map <- maps::map("world", regioplot = FALSE, fill = TRUE) %>%
+  st_as_sf() %>%
+  mutate(ID = ifelse(ID == "USA", "United States", ID))%>%
+  rename(Country = ID)
+
+
+indicatorMap <- world_map %>%
+  inner_join(GIIHDI, by = "Country") %>%
+  mutate(Parliament = as.double(Parliament))
+
+class(indicatorMap)
+
+indicatorMap <- na.omit(indicatorMap)
+
+ggplot(indicatorMap, aes(geometry = geom, fill = as.double(LF_Part))) +
+  geom_sf() +
+  theme_void() +
+  scale_fill_viridis(option = "magma", direction = -1)
+
+save(indicatorMap, file = "Shreya.RData")
+
+
+```
+
+```{r}
+library(leaflet)
+
+mypalette <- colorNumeric("Reds", domain = indicatorMap$Parliament)
+
+mytext <- paste(
+  "Country: ", indicatorMap$Country, "<br/>",
+  "Adolescent BirthRate: ", indicatorMap$Adol_birthrate, "<br/>",
+  "Political Participation: ", indicatorMap$Parliament, "<br/>",
+  "Labour Force Participation: ", indicatorMap$LF_Part, "<br/>",
+  sep = ""
+) %>%
+  lapply(htmltools::HTML)
+
+leaflet() %>%
+  addTiles() %>%
+  setView(lat = 10, lng = 0, zoom = 2) %>%
+  addPolygons(data = indicatorMap, fillColor = ~mypalette(indicatorMap$Parliament), stroke = FALSE,
+              fillOpacity = 0.7,
+              label = mytext)
+```
+
+
+
+
+
