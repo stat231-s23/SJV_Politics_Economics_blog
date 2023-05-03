@@ -87,4 +87,70 @@ GIIHDI <- GIIHDI %>%
 write.csv(GIIHDI, "GIIHDI.csv", row.names = FALSE)
 ```
 
+```{r}
+###Cartograph###
+
+library(tidyverse)
+library(sf)
+library(viridis)
+library(maptools)
+library(cartogram)
+library(ggplot2)
+library(patchwork)
+library(broom)
+library(tmap)
+library(rayshader)
+```
+
+```{r}
+
+world_map <- maps::map("world", regioplot = FALSE, fill = TRUE) %>%
+  st_as_sf() %>%
+  mutate(ID = ifelse(ID == "USA", "United States", ID))%>%
+  rename(Country = ID)
+
+
+indicatorMap <- world_map %>%
+  inner_join(GIIHDI, by = "Country") %>%
+  mutate(Parliament = as.double(Parliament))
+
+class(indicatorMap)
+
+indicatorMap <- na.omit(indicatorMap)
+
+ggplot(indicatorMap, aes(geometry = geom, fill = as.double(LF_Part))) +
+  geom_sf() +
+  theme_void() +
+  scale_fill_viridis(option = "magma", direction = -1)
+
+save(indicatorMap, file = "Shreya.RData")
+
+
+```
+
+```{r}
+library(leaflet)
+
+mypalette <- colorNumeric("Reds", domain = indicatorMap$Parliament)
+
+mytext <- paste(
+  "Country: ", indicatorMap$Country, "<br/>",
+  "Adolescent BirthRate: ", indicatorMap$Adol_birthrate, "<br/>",
+  "Political Participation: ", indicatorMap$Parliament, "<br/>",
+  "Labour Force Participation: ", indicatorMap$LF_Part, "<br/>",
+  sep = ""
+) %>%
+  lapply(htmltools::HTML)
+
+leaflet() %>%
+  addTiles() %>%
+  setView(lat = 10, lng = 0, zoom = 2) %>%
+  addPolygons(data = indicatorMap, fillColor = ~mypalette(indicatorMap$Parliament), stroke = FALSE,
+              fillOpacity = 0.7,
+              label = mytext)
+```
+
+
+
+
 

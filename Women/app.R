@@ -1,9 +1,9 @@
 library(shiny)
 library(tidyverse)
-library(cartogram)
+library(cartography)
 
 # Load data
-GIIHDI <- read.csv("/Users/shreyasusanmathew/Desktop/STAT 231/SJV_Politics_Economics_blog/Women/GIIHDI.csv")
+load("Shreya.RData")
 
 # Define names of the variables
 indicator_choice_values <- c("Adol_birthrate", "Parliament", "Secondary", "LF_Part")
@@ -27,7 +27,7 @@ ui <- fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
-      cartogramOutput("cartogram")
+      leafletOutput(outputId = "ChoroplethMap")
     )
   )
 )
@@ -35,22 +35,28 @@ ui <- fluidPage(
 # Define server logic required to generate cartogram plot
 server <- function(input, output) {
   
-  # Create reactive expression for cartogram data
-  carto_data <- reactive({
-    # Subset data based on selected indicator
-    selected_var <- input$indicator
-    subset(GIIHDI, select = c("ISO_Code", selected_var))
-  })
+  
+  mypalette <- colorNumeric("Reds", domain = indicatorMap$Parliament)
+
+  
+  mytext <- paste(
+    "Country: ", indicatorMap$Country, "<br/>",
+    "Adolescent BirthRate: ", indicatorMap$Adol_birthrate, "<br/>",
+    "Political Participation: ", indicatorMap$Parliament, "<br/>",
+    "Labour Force Participation: ", indicatorMap$LF_Part, "<br/>",
+    sep = ""
+  ) %>%
+    lapply(htmltools::HTML)
+  
   
   # Generate cartogram plot
-  output$cartogram <- renderCartogram({
-    cartogram(
-      data = carto_data(),
-      projection = "mercator",  # Choose map projection
-      weight = input$indicator,  # Choose variable to weight by
-      group = "ISO_Code",  # Specify country grouping variable
-      itermax = 5  # Set maximum number of iterations for cartogram algorithm
-    )
+  output$ChoroplethMap <- renderLeaflet({
+    leaflet() %>%
+      addTiles() %>%
+      setView(lat = 10, lng = 0, zoom = 2) %>%
+      addPolygons(data = indicatorMap, fillColor = ~mypalette(indicatorMap$Parliament), stroke = FALSE,
+                  fillOpacity = 0.7,
+                  label = mytext)
   })
 }
 
