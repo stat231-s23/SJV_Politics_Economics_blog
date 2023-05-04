@@ -8,6 +8,7 @@ library(ggrepel)
 library(broom)
 library(GGally)
 library(purrr)
+library(sf)
 
 library(gapminder)
 ```
@@ -44,8 +45,13 @@ Abbreviations <- oecdAbbreviations %>%
   select("CODE", "Country")
 
 #Now I want to join the oecd abbreviations to the countries in the HDItable.
+#I changed something that was different here.
+#HDItable2 <- HDItable %>%
+ # left_join(Abbreviations, by = contains("Country", "Country"))
+#unmatched <- as.list(HDItable2 %>% filter(is.na(CODE)) %>% select(Country))
+
 HDItable2 <- HDItable %>%
-  left_join(Abbreviations, by = contains("Country", "Country"))
+  left_join(Abbreviations, by = c("Country" = "Country"))
 unmatched <- as.list(HDItable2 %>% filter(is.na(CODE)) %>% select(Country))
 
 
@@ -151,7 +157,7 @@ ggplot(HDI_map2, aes(geometry=geom, fill = as.numeric(`Human Development Index`)
 world_map3 <- world_map2 %>%
   inner_join(HDItable3, world_map2, by = c("ID" = "Country")) %>%
   select(geom, ID, region, density, latestRate) %>%
-  filter(region == "Africa")
+  filter(region == "South America")
 
 symbol_pos <- st_centroid(world_map3, of_largest_polygon = TRUE)
 
@@ -170,7 +176,9 @@ ggplot(data = world_map3, aes(fill = latestRate)) +
           fill = alpha("red", 0.7),
           col = "grey20") +
   labs(size = "density") +
-  scale_size(range = c(1, 6))
+  scale_size(range = c(1, 6)) +
+  scale_fill_distiller(palette = "Spectral")  
+
 
 #Where does this get the labels on the side from?
 ggplot(data = world_map3, aes(x = latestRate, y = density)) +
@@ -180,7 +188,6 @@ ggplot(data = world_map3, aes(x = latestRate, y = density)) +
              labs (y = "Literacy Rate",
                    x = "Population Density",
                    title = "Population Density vs. Literacy Rate")
-
 
 
 ```
