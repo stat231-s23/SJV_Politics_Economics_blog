@@ -91,7 +91,7 @@ server <- function(input, output) {
    # }
     
     indicator_rescaled <- rescale(indicator, to = c(0, 1))
-    mypalette <- colorBin(c("red"), domain = indicator_rescaled, bins = my_bins(), reverse = TRUE, na.color = "#FAF9F6")
+    mypalette <- colorBin(c("green"), domain = indicator_rescaled, bins = my_bins(), reverse = TRUE, na.color = "#FAF9F6")
     
     leaflet() %>%
       addTiles() %>%

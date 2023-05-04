@@ -128,12 +128,15 @@ world_map <- maps::map("world", regioplot = FALSE, fill = TRUE) %>%
   mutate(ID = ifelse(ID == "Syria", "Syrian Arab Republic", ID))%>%
   mutate(ID = ifelse(ID == "Eritrea", "Eritrea", ID))%>%
   mutate(ID = ifelse(ID == "Bolivia", "Bolivia (Plurinational State of)", ID))%>%
-  mutate(ID = ifelse(ID == "EVenezuela", "Venezuela (Bolivarian Republic of)", ID))%>%
+  mutate(ID = ifelse(ID == "Venezuela", "Venezuela (Bolivarian Republic of)", ID))%>%
   mutate(ID = ifelse(ID == "UK", "United Kingdom", ID))%>%
   mutate(ID = ifelse(ID == "Ivory Coast", "Côte d'Ivoire", ID))%>%
   mutate(ID = ifelse(ID == "Greenland", "Denmark", ID))%>%
-  mutate(ID = ifelse(ID == "Democratic Republic of the Congo", "Congo (Democratic Republic of the)", ID))%>%
+  mutate(ID = ifelse(ID == "Republic of Congo", "Congo", ID))%>%
   mutate(ID = ifelse(ID == "French Guiana", "Guyana", ID))%>%
+  mutate(ID = ifelse(ID == "Czech", "Czechia", ID))%>%
+  mutate(ID = ifelse(ID == "Tanzania", "Tanzania (United Republic of)", ID))%>%
+  mutate(ID = ifelse(ID == "Tanzania", "Tanzania (United Republic of)", ID))%>%
   
   rename(Country = ID)
 
