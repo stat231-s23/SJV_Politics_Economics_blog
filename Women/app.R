@@ -15,7 +15,7 @@ names(indicator_choice_values) <- indicator_choice_names
 rank_choice_values <- c("High" = indicator_choice_values[indicator_choice_values >= 80], 
                         "Medium" = indicator_choice_values[indicator_choice_values >= 50 & indicator_choice_values < 80],
                         "Low" = indicator_choice_values[indicator_choice_values < 50])
-rank_choice_names <- c("High", "Medium", "Low")
+rank_choice_names <- c("Very High", "High", "Medium", "Low", "All")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -31,10 +31,10 @@ ui <- fluidPage(
                   choices = indicator_choice_values,
                   selected = "Adol_birthrate"),
       ##############################################
-      checkboxGroupInput(inputId = "rank"
+      radioButtons(inputId = "rank"
                    , label = "Choose the range:"
                    , choices = rank_choice_names
-                   , selected = "NULL"),
+                   , selected = "All"),
     ),
     
     # Show a plot of the generated distribution
@@ -48,7 +48,7 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   
-  mypalette <- colorNumeric("Reds", domain = indicatorMap$indicator)
+  
 
   
   mytext <- paste(
@@ -60,6 +60,22 @@ server <- function(input, output) {
   ) %>%
     lapply(htmltools::HTML)
   
+  my_bins <- reactive({
+    if("Low" == input$rank ) {
+      return(c(0, 0.3))
+    }
+    if("Medium"== input$rank) {
+      return(c(0.3, 0.5))
+    }
+    if("High"== input$rank) {
+      return(c(0.5, 0.8))
+    }
+    if("Very High"== input$rank) {
+      return(c(0.8, 1.0))
+    }
+    vec <- c(0, 1.0)
+    return(vec)
+  })
   
   # Generate cartogram plot
   output$ChoroplethMap <- renderLeaflet({
@@ -75,6 +91,7 @@ server <- function(input, output) {
    # }
     
     indicator_rescaled <- rescale(indicator, to = c(0, 1))
+    mypalette <- colorBin(c("red"), domain = indicator_rescaled, bins = my_bins(), reverse = TRUE, na.color = "#FAF9F6")
     
     leaflet() %>%
       addTiles() %>%

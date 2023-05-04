@@ -110,14 +110,31 @@ library(ggplot2)
 library(patchwork)
 library(broom)
 library(tmap)
-library(rayshader)
 ```
 
 ```{r}
 
+#Iran (Islamic Republic of)
+
 world_map <- maps::map("world", regioplot = FALSE, fill = TRUE) %>%
   st_as_sf() %>%
   mutate(ID = ifelse(ID == "USA", "United States", ID))%>%
+  mutate(ID = ifelse(ID == "Russia", "Russian Federation", ID))%>%
+  mutate(ID = ifelse(ID == "Iran", "Iran (Islamic Republic of)", ID))%>%
+  mutate(ID = ifelse(ID == "South Korea", "Korea (Republic of)", ID))%>%
+  mutate(ID = ifelse(ID == "Vietnam", "Viet Nam", ID))%>%
+  mutate(ID = ifelse(ID == "Laos", "Lao People's Democratic Republic", ID))%>%
+  mutate(ID = ifelse(ID == "Taiwan", "Hong Kong, China (SAR)", ID))%>%
+  mutate(ID = ifelse(ID == "Syria", "Syrian Arab Republic", ID))%>%
+  mutate(ID = ifelse(ID == "Eritrea", "Eritrea", ID))%>%
+  mutate(ID = ifelse(ID == "Bolivia", "Bolivia (Plurinational State of)", ID))%>%
+  mutate(ID = ifelse(ID == "EVenezuela", "Venezuela (Bolivarian Republic of)", ID))%>%
+  mutate(ID = ifelse(ID == "UK", "United Kingdom", ID))%>%
+  mutate(ID = ifelse(ID == "Ivory Coast", "Côte d'Ivoire", ID))%>%
+  mutate(ID = ifelse(ID == "Greenland", "Denmark", ID))%>%
+  mutate(ID = ifelse(ID == "Democratic Republic of the Congo", "Congo (Democratic Republic of the)", ID))%>%
+  mutate(ID = ifelse(ID == "French Guiana", "Guyana", ID))%>%
+  
   rename(Country = ID)
 
 
