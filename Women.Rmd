@@ -47,6 +47,8 @@ colnames(Adoloscent_birth) <- c("Country", "Adol_birthrate")
 
 GIIHDI <- GIIHDI %>% 
   left_join(Adoloscent_birth, by = "Country")
+
+GIIHDI$Adol_birthrate <- as.numeric(GIIHDI$Adol_birthrate)
   
 ```
 
@@ -59,6 +61,9 @@ colnames(Parliament) <- c("Country", "Parliament")
 
 GIIHDI <- GIIHDI %>% 
   left_join(Parliament, by = "Country")
+
+GIIHDI$Parliament <- as.numeric(GIIHDI$Parliament)
+
 ```
 
 ```{r}
@@ -70,6 +75,9 @@ colnames(Secondary) <- c("Country", "Secondary")
 
 GIIHDI <- GIIHDI %>% 
   left_join(Secondary, by = "Country")
+
+GIIHDI$Secondary <- as.numeric(GIIHDI$Secondary)
+
 ```
 
 ```{r}
@@ -81,6 +89,9 @@ colnames(LabourForce) <- c("Country", "LF_Part")
 
 GIIHDI <- GIIHDI %>% 
   left_join(LabourForce, by = "Country")
+
+GIIHDI$LF_Part <- as.numeric(GIIHDI$LF_Part)
+
 ```
 
 ```{r}
