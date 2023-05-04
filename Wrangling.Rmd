@@ -4,13 +4,7 @@ library(tidyverse)
 library(kableExtra)
 library(dplyr)
 library(zoo)
-library(ggrepel)
-library(broom)
-library(GGally)
-library(purrr)
-library(sf)
-
-library(gapminder)
+library(fuzzyjoin)
 ```
 
 ```{r}
@@ -45,15 +39,53 @@ Abbreviations <- oecdAbbreviations %>%
   select("CODE", "Country")
 
 #Now I want to join the oecd abbreviations to the countries in the HDItable.
-#I changed something that was different here.
-#HDItable2 <- HDItable %>%
- # left_join(Abbreviations, by = contains("Country", "Country"))
-#unmatched <- as.list(HDItable2 %>% filter(is.na(CODE)) %>% select(Country))
+HDItable[4,2] = Abbreviations[90,2]
+HDItable[32,2] = Abbreviations[48,2]
+HDItable[45,2] = Abbreviations[49,2]
+HDItable[48,2] = Abbreviations[199,2]
+HDItable[52,2] = Abbreviations[218,2]
+HDItable[74,2] = Abbreviations[72,2]
+HDItable[76,2] = Abbreviations[98,2]
+HDItable[78,2] = Abbreviations[74,2]
+HDItable[81,2] = Abbreviations[217,2]
+HDItable[82,2] = Abbreviations[161,2]
+HDItable[92,2] = Abbreviations[209,2]
+HDItable[94,2] = Abbreviations[220,2]
+HDItable[106,2] = Abbreviations[167,2]
+HDItable[115,2] = Abbreviations[228,2]
+HDItable[118,2] = Abbreviations[26,2]
+HDItable[119,2] = Abbreviations[214,2]
+HDItable[120,2] = Abbreviations[225,2]
+HDItable[122,2] = Abbreviations[219,2]
+HDItable[128,2] = Abbreviations[45,2]
+HDItable[134,2] = Abbreviations[70,2]
+HDItable[140,2] = Abbreviations[114,2]
+HDItable[144,2] = Abbreviations[186,2]
+HDItable[150,2] = Abbreviations[188,2]
+HDItable[160,2] = Abbreviations[202,2]
+HDItable[179,2] = Abbreviations[40,2]
+
 
 HDItable2 <- HDItable %>%
   left_join(Abbreviations, by = c("Country" = "Country"))
 unmatched <- as.list(HDItable2 %>% filter(is.na(CODE)) %>% select(Country))
+row <- which(is.na(HDItable2$CODE))
+hardCode <- list( row, unmatched)
+#Montenegro and Serbia
+HDItable2[49,6] = "MNE"
+HDItable2[65,6] = "SRB"
+# Uganda
+HDItable2[167,6] = "UGA"
+#South Sudan
+HDItable2[191,6] = "SSD"
+#South Korea
+HDItable2[20,6] = "KOR"
 
+for(i in 1:nrow(HDItable2)){
+  if(nchar(HDItable2[i,6]) > 3){
+    HDItable2[i,6] = substring(HDItable2[i,6],6)
+  }
+}
 
 #This part is not working out very nicely.
 HDItable3 <- HDItable2 %>%
@@ -67,129 +99,6 @@ HDItable3 <- HDItable2 %>%
   select(-(Country.Name.y)) %>%
   left_join(Literacy, by = c("Country" = "country"))
 write.csv(HDItable3, "data/wrangled.csv")
-
-```
-
-```{r}
-Education_Literacy <- HDItable3 %>%
-  select(region, Country, `Expected Years of Schooling`, latestRate) %>%
-  drop_na() 
-
-#The "as.numeric" numeric function: https://www.educative.io/answers/what-is-the-asnumeric-function-in-r
-#What is happening with Europe?
-Education_Literacy_cor <- Education_Literacy %>%
-  group_by(region) %>%
-  summarize(r_education = cor(latestRate, as.numeric(`Expected Years of Schooling`))) %>% 
-left_join(Education_Literacy, Education_Literacy_cor, by = c("region" = "region"))
-
-
-HDI_Literacy <-HDItable3 %>%
-  select(region, Country, `Human Development Index`, latestRate) %>%
-  drop_na()
-
-HDI_Literacy_cor <- HDI_Literacy %>%
-  group_by(region) %>%
-  summarize(r_HDI = cor(latestRate, as.numeric(`Human Development Index`))) %>%
-  left_join(HDI_Literacy, HDI_Literacy_cor, by = c("region" = "region")) %>%
-  select(r_HDI, Country, `Human Development Index`)
-
-HDI_Education <- left_join(Education_Literacy_cor, HDI_Literacy_cor, by = c("Country" = "Country")) %>%
-  #negative means that education is a better predictor of literacy, positive means HDI is better.
-  mutate(diff = r_HDI - r_education)
-
-Density <- HDItable3 %>%
-  select(Country, density)
-
-HDI_Education2 <- HDI_Education %>%
-  left_join(Density, HDI_Education, by = c("Country" = "Country"))
-
-
-
-
-```
-
-
-```{r}
-
-data(gapminder)
-
-world_map2 <- maps::map("world", plot = FALSE, fill = TRUE) %>%
-  st_as_sf()
-
-HDI_Education_map <- HDI_Education2 %>%
-  right_join(world_map2, by = c("Country" = "ID"))
-
-
-##Plotting difference between r_education and r_HDI on a world map
-ggplot(HDI_Education_map, aes(geometry=geom, fill = diff)) +
-  geom_sf() +
-  theme_void() +
-  labs(fill = "Difference"
-       , title = "Where is HDI a better predictor of literacy rate than years of education?",
-       subtitle = "Years: 2021, 2023"
-       , caption = "Source: world bank data set") 
-
-
-#One problem with this initial analysis is that it is quite granular. However, the map does bring to light the delineation between the "Global North" and "Global South." In the southern hemisphere, the "Global South," HDI and education are nearly equal predictors of literacy rate. This tracks with the idea that in so-called "under-developed" regions of the world---and HDI *is* lower in the Global South---obstacles to literacy are not purely educational. That is, in places where eduaction and HDI are comparable predictors of literacy, extra-educational aspects are predicting literacy rate. 
-
-#Can I make a map of HDI in the world? Here it is!
-
-HDI_map <- HDItable3 %>%
-  select(Country, `Human Development Index`)
-
-HDI_map2 <- HDI_map %>%
-  right_join(world_map2, by = c("Country" = "ID"))
-
-ggplot(HDI_map2, aes(geometry=geom, fill = as.numeric(`Human Development Index`))) +
-  geom_sf() +
-  theme_void() +
-  labs(fill = "Human Development Index"
-       , title = "HDI by country",
-       subtitle = "Years: "
-       , caption = "Source: World Bank data set") +
-  scale_fill_distiller(palette = "Spectral")  
-```
-
-
-```{r}
-#finding centroids for dotted cloropleth:
-
-world_map3 <- world_map2 %>%
-  inner_join(HDItable3, world_map2, by = c("ID" = "Country")) %>%
-  select(geom, ID, region, density, latestRate) %>%
-  filter(region == "South America")
-
-symbol_pos <- st_centroid(world_map3, of_largest_polygon = TRUE)
-
-Dot_map <- inner_join(symbol_pos, HDItable3, by = c("ID" = "Country"))
-
-ggplot(world_map3) +
-  geom_sf() +
-  geom_sf(data = symbol_pos, color = "blue")
-
-
-ggplot(data = world_map3, aes(fill = latestRate)) +
-  geom_sf(data = world_map3, color = "green") +
-  geom_sf(data = symbol_pos,
-          pch = 21,
-          aes(size = density),
-          fill = alpha("red", 0.7),
-          col = "grey20") +
-  labs(size = "density") +
-  scale_size(range = c(1, 6)) +
-  scale_fill_distiller(palette = "Spectral")  
-
-
-#Where does this get the labels on the side from?
-ggplot(data = world_map3, aes(x = latestRate, y = density)) +
-             geom_point(size = 2) +
-             geom_smooth(method = "lm") +
-            #Labels and title for the scatter plot
-             labs (y = "Literacy Rate",
-                   x = "Population Density",
-                   title = "Population Density vs. Literacy Rate")
-
-
 ```
 
 ```{r}
@@ -263,6 +172,7 @@ ggplot(GIIHDI, aes(x = `Human Development Index`, y = `GII Value`, color = clust
   labs(title = "Cluster plot for GII values", x = "GII value") +
   theme_minimal()
 ```
+
 ```{r}
 location_raw <- read.csv("data/location.csv", head = TRUE)
 
@@ -278,10 +188,8 @@ GIIHDILocation <- GIIHDI %>%
 ggplot(GIIHDILocation, aes(x = longitude, y = latitude, fill = `HDI rank`)) +
   geom_point(alpha = 0.5)  + 
   scale_color_brewer(palette = "Set2")
-```
 
-```{r}
-write.csv(GIIHDI, "GIIHDI.csv")
+
 ```
 
 

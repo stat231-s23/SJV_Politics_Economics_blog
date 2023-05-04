@@ -8,7 +8,6 @@ output:
 ---
 Packages
 ```{r}
-library(shiny)
 library(dplyr)
 library(sf)
 library(viridis)
@@ -31,17 +30,30 @@ lm_eqn <- function(df){
              r2 = format(summary(m)$r.squared, digits = 3)))
     as.character(as.expression(eq));
 }
-unempData1 <- unempData
+na <- as.list(unempData %>% select(Country, region) %>% filter(is.na(region)))
+unempData1 <- unempData %>% na.omit(region)
 unempData1 %>% ggplot(aes(x = Expected.Years.of.Schooling, y = Human.Development.Index)) + geom_point( aes(color = region)) +
   geom_smooth(method='lm') +
-  geom_text(x = 12, y = 1.1, label = lm_eqn(unempData1), parse = TRUE) 
+  geom_text(x = 12, y = 1.1, label = lm_eqn(unempData1), parse = TRUE) +
+  labs(
+    x = "Expected Years of Schooling",
+    y = "Human Development Index",
+    color = "Continent"
+  )
 
 ```
 
 ```{r}
 gisco_countries <- gisco_get_countries() %>% select(-c(CNTR_ID, CNTR_NAME ,NAME_ENGL))
-unempData2 <- unempData1 %>% full_join(gisco_countries, by = c("CODE" = "ISO3_CODE"))
+unempData2 <- unempData %>% full_join(gisco_countries, by = c("CODE" = "ISO3_CODE"))
 ggplot(unempData2, aes(geometry=geometry, fill = Human.Development.Index)) +
   geom_sf() +
-  theme_void()
+  scale_fill_viridis(option = "turbo", direction = -1) + 
+  theme_void() + 
+  labs(
+    fill = "HDI",
+    title = "Human Development Index (HDI) of Countries",
+    subtitle = "2021",
+    caption = "Source: World Bank"
+  )
 ```
