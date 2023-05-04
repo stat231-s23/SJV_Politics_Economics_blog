@@ -4,6 +4,12 @@ library(tidyverse)
 library(kableExtra)
 library(dplyr)
 library(zoo)
+library(ggrepel)
+library(broom)
+library(GGally)
+library(purrr)
+
+library(gapminder)
 ```
 
 ```{r}
@@ -55,6 +61,128 @@ HDItable3 <- HDItable2 %>%
   select(-(Country.Name.y)) %>%
   left_join(Literacy, by = c("Country" = "country"))
 write.csv(HDItable3, "data/wrangled.csv")
+
+```
+
+```{r}
+Education_Literacy <- HDItable3 %>%
+  select(region, Country, `Expected Years of Schooling`, latestRate) %>%
+  drop_na() 
+
+#The "as.numeric" numeric function: https://www.educative.io/answers/what-is-the-asnumeric-function-in-r
+#What is happening with Europe?
+Education_Literacy_cor <- Education_Literacy %>%
+  group_by(region) %>%
+  summarize(r_education = cor(latestRate, as.numeric(`Expected Years of Schooling`))) %>% 
+left_join(Education_Literacy, Education_Literacy_cor, by = c("region" = "region"))
+
+
+HDI_Literacy <-HDItable3 %>%
+  select(region, Country, `Human Development Index`, latestRate) %>%
+  drop_na()
+
+HDI_Literacy_cor <- HDI_Literacy %>%
+  group_by(region) %>%
+  summarize(r_HDI = cor(latestRate, as.numeric(`Human Development Index`))) %>%
+  left_join(HDI_Literacy, HDI_Literacy_cor, by = c("region" = "region")) %>%
+  select(r_HDI, Country, `Human Development Index`)
+
+HDI_Education <- left_join(Education_Literacy_cor, HDI_Literacy_cor, by = c("Country" = "Country")) %>%
+  #negative means that education is a better predictor of literacy, positive means HDI is better.
+  mutate(diff = r_HDI - r_education)
+
+Density <- HDItable3 %>%
+  select(Country, density)
+
+HDI_Education2 <- HDI_Education %>%
+  left_join(Density, HDI_Education, by = c("Country" = "Country"))
+
+
+
+
+```
+
+
+```{r}
+
+data(gapminder)
+
+world_map2 <- maps::map("world", plot = FALSE, fill = TRUE) %>%
+  st_as_sf()
+
+HDI_Education_map <- HDI_Education2 %>%
+  right_join(world_map2, by = c("Country" = "ID"))
+
+
+##Plotting difference between r_education and r_HDI on a world map
+ggplot(HDI_Education_map, aes(geometry=geom, fill = diff)) +
+  geom_sf() +
+  theme_void() +
+  labs(fill = "Difference"
+       , title = "Where is HDI a better predictor of literacy rate than years of education?",
+       subtitle = "Years: 2021, 2023"
+       , caption = "Source: world bank data set") 
+
+
+#One problem with this initial analysis is that it is quite granular. However, the map does bring to light the delineation between the "Global North" and "Global South." In the southern hemisphere, the "Global South," HDI and education are nearly equal predictors of literacy rate. This tracks with the idea that in so-called "under-developed" regions of the world---and HDI *is* lower in the Global South---obstacles to literacy are not purely educational. That is, in places where eduaction and HDI are comparable predictors of literacy, extra-educational aspects are predicting literacy rate. 
+
+#Can I make a map of HDI in the world? Here it is!
+
+HDI_map <- HDItable3 %>%
+  select(Country, `Human Development Index`)
+
+HDI_map2 <- HDI_map %>%
+  right_join(world_map2, by = c("Country" = "ID"))
+
+ggplot(HDI_map2, aes(geometry=geom, fill = as.numeric(`Human Development Index`))) +
+  geom_sf() +
+  theme_void() +
+  labs(fill = "Human Development Index"
+       , title = "HDI by country",
+       subtitle = "Years: "
+       , caption = "Source: World Bank data set") +
+  scale_fill_distiller(palette = "Spectral")  
+```
+
+
+```{r}
+#finding centroids for dotted cloropleth:
+
+world_map3 <- world_map2 %>%
+  inner_join(HDItable3, world_map2, by = c("ID" = "Country")) %>%
+  select(geom, ID, region, density, latestRate) %>%
+  filter(region == "Africa")
+
+symbol_pos <- st_centroid(world_map3, of_largest_polygon = TRUE)
+
+Dot_map <- inner_join(symbol_pos, HDItable3, by = c("ID" = "Country"))
+
+ggplot(world_map3) +
+  geom_sf() +
+  geom_sf(data = symbol_pos, color = "blue")
+
+
+ggplot(data = world_map3, aes(fill = latestRate)) +
+  geom_sf(data = world_map3, color = "green") +
+  geom_sf(data = symbol_pos,
+          pch = 21,
+          aes(size = density),
+          fill = alpha("red", 0.7),
+          col = "grey20") +
+  labs(size = "density") +
+  scale_size(range = c(1, 6))
+
+#Where does this get the labels on the side from?
+ggplot(data = world_map3, aes(x = latestRate, y = density)) +
+             geom_point(size = 2) +
+             geom_smooth(method = "lm") +
+            #Labels and title for the scatter plot
+             labs (y = "Literacy Rate",
+                   x = "Population Density",
+                   title = "Population Density vs. Literacy Rate")
+
+
+
 ```
 
 ```{r}
