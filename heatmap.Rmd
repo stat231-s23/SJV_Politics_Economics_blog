@@ -22,7 +22,18 @@ rawData <- read.csv("GIIHDI.csv")
 heat <- rawData %>% 
   arrange(desc(X2021)) %>% 
   slice(1:30) %>% 
-  arrange(desc(HDI_rank))
+  arrange(desc(HDI_rank)) %>% 
+  rename(adoloscentBirthrate = Adol_birthrate) %>% 
+  rename(politicalParticipation = Parliament) %>% 
+  rename(educationLevel = Secondary) %>% 
+  rename(labourParticipation = LF_Part)
+  
+
+#standardising
+#heat$adoloscentBirthrate <- scale(heat$Adol_birthrate)
+#heat$parlimentaryParticipation <- scale(heat$Parliament)
+#heat$secondaryEducation <- scale(heat$Secondary)
+#heat$labourParticipation <- scale(heat$LF_Part)
   
 ```
 
@@ -41,8 +52,11 @@ library(heatmaply)
 #colors <- c("#FF8A8A", "#FF5C5C", "#D10000", "#A30000", "#750000")
 #legend_labels <- c("Lowest", "Low", "Medium", "High", "Highest")
 
-p <- heatmaply(matrix, #colors = colors, 
+p <- heatmaply(matrix, 
         dendrogram = TRUE,
+        show_colorbar = TRUE,
+        width = 1000,
+        height = 800,
         xlab = "", ylab = "", 
         main = "",
         scale = "column",
@@ -55,8 +69,11 @@ p <- heatmaply(matrix, #colors = colors,
         fontsize_row = 5, fontsize_col = 5,
         labCol = colnames(matrix),
         labRow = rownames(matrix),
-        heatmap_layers = theme(axis.line=element_blank())
+        heatmap_layers = theme(axis.line=element_blank()),
+        legend = TRUE,
+        legend_side = "right"
         )
+
 print(p)
 ```
 
