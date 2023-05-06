@@ -41,6 +41,7 @@ heat <- rawData %>%
 #crwating matrix
 matrix <- heat
 rownames(matrix) <- matrix[,1]
+matrix <- matrix %>% arrange(desc(X2021))
 matrix <- matrix %>% dplyr::select(-Country, -HDI_value, -HDI_rank, -GII_value, -GII_rank, -X2021)
 matrix <- as.matrix(matrix)
 ```
@@ -56,7 +57,7 @@ p <- heatmaply(matrix,
         dendrogram = TRUE,
         show_colorbar = TRUE,
         width = 1000,
-        height = 800,
+        height = 600,
         xlab = "", ylab = "", 
         main = "",
         scale = "column",
@@ -65,7 +66,7 @@ p <- heatmaply(matrix,
         grid_width = 0.00001,
         titleX = FALSE,
         hide_colorbar = TRUE,
-        branches_lwd = 0.1,
+        branches_lwd = 0.2,
         fontsize_row = 5, fontsize_col = 5,
         labCol = colnames(matrix),
         labRow = rownames(matrix),

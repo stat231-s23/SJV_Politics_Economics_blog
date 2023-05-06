@@ -1,6 +1,6 @@
 ---
 title: "Exploring Factors that Contribute to Country Development"
-author: "Jesse, Shreya, Victor"
+author: "Shreya, Jesse, Victor"
 date: "05/03/2023"
 output:
   rmdformats::readthedown:
