@@ -25,6 +25,7 @@ library(ggplot2)
 library(purrr)
 library(giscoR)
 library(heatmaply)
+library(htmlwidgets)
 
 ```
 
@@ -366,46 +367,8 @@ We will look into four key indicators of Women's Empowement measure
 
 ### Heatmap: HDI, Polulation, Key indicators of Women's Empowerment
 
-```{r, message=FALSE}
-#heatmap
-load("heatmap.RData")
-library(tidyverse)
-library(kableExtra)
-library(dplyr)
-library(zoo)
-library(readxl)
-library(factoextra)
-library(cluster)
-library(cartogram)
-library(hrbrthemes)
-library(viridis)
-library(plotly)
-library(pheatmap)
-library(heatmaply)
-
-p <- heatmaply(matrix, 
-        dendrogram = TRUE,
-        show_colorbar = TRUE,
-        width = 1000,
-        height = 600,
-        xlab = "", ylab = "", 
-        main = "",
-        scale = "column",
-        margins = c(60,100,40,20),
-        grid_color = "white",
-        grid_width = 0.00001,
-        titleX = FALSE,
-        hide_colorbar = TRUE,
-        branches_lwd = 0.2,
-        fontsize_row = 5, fontsize_col = 5,
-        labCol = colnames(matrix),
-        labRow = rownames(matrix),
-        heatmap_layers = theme(axis.line=element_blank()),
-        legend = TRUE,
-        legend_side = "right"
-        )
-
-print(p)
+```{r, message=FALSE, echo=FALSE}
+htmltools::tags$iframe(src="heatmap.html", width="100%", height="500")
 ```
 
 
