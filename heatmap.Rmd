@@ -44,6 +44,8 @@ rownames(matrix) <- matrix[,1]
 matrix <- matrix %>% arrange(desc(X2021))
 matrix <- matrix %>% dplyr::select(-Country, -HDI_value, -HDI_rank, -GII_value, -GII_rank, -X2021)
 matrix <- as.matrix(matrix)
+
+save(matrix, file = "heatMap.RData")
 ```
 
 ```{r}
@@ -76,6 +78,12 @@ p <- heatmaply(matrix,
         )
 
 print(p)
+```
+```{r}
+#saving the heatmap
+
+ggsave("heatmap.png", p)
+
 ```
 
 
