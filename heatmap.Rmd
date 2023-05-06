@@ -1,0 +1,37 @@
+```{r}
+library(tidyverse)
+library(kableExtra)
+library(dplyr)
+library(zoo)
+library(readxl)
+library(factoextra)
+library(cluster)
+library(cartogram)
+library(hrbrthemes)
+library(viridis)
+library(plotly)
+library(pheatmap)
+library(heatmaply)
+```
+
+```{r}
+#reading and wrangling
+rawData <- read.csv("GIIHDI.csv")
+
+#filtering
+heat <- rawData %>% 
+  arrange(desc(X2021)) %>% 
+  slice(1:30) %>% 
+  arrange(desc(HDI_rank))
+  
+```
+
+```{r}
+matrix <- heat
+rownames(matrix) <- matrix[,1]
+matrix <- matrix %>% dplyr::select(-Country, -HDI_value, -HDI_rank, -GII_value, -GII_rank, -X2021)
+matrix <- as.matrix(matrix)
+
+```
+
+
