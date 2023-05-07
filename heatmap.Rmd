@@ -12,6 +12,7 @@ library(viridis)
 library(plotly)
 library(pheatmap)
 library(heatmaply)
+library(htmlwidgets)
 ```
 
 ```{r}
@@ -82,7 +83,8 @@ print(p)
 ```{r}
 #saving the heatmap
 
-ggsave("heatmap.png", p)
+# save the map as an interactive HTML file
+saveWidget(p, file="heatmap.html")
 
 ```
 

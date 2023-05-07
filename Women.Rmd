@@ -15,6 +15,12 @@ library(cartogram)
 #importing the GII dataset
 GIIraw <- read_excel("data/GII.xlsx", col_names = TRUE, skip = 2)
 
+rawPopulation <- read_excel("data/Population.xls", col_names = TRUE, skip = 3)
+
+population <- rawPopulation %>% 
+  select(`Country Name`, `2021`) %>% 
+  rename("Country" = `Country Name`)
+
 #removing the na values plus selecting relevant columns
 GII <- GIIraw %>% 
   select(...1, ...2, ...3, ...5) %>% 
@@ -92,6 +98,12 @@ GIIHDI <- GIIHDI %>%
 
 GIIHDI$LF_Part <- as.numeric(GIIHDI$LF_Part)
 
+```
+
+```{r}
+#mergining population and indicators
+GIIHDI <- GIIHDI %>% 
+  left_join(population, by = "Country")
 ```
 
 ```{r}
