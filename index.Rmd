@@ -184,9 +184,12 @@ Observe that two continents, South America and Africa, are picked out as having 
 
 One problem with this analysis is that it is not granular. It gives us a view of the world that is split into seven, when in reality, the world has far more than seven borders. 
 
-Our next analysis attempts sort countries according to
+Our next analysis clusters countries according to literacy rate and population density. The goal of the analysis is to show that the division into Global North and Global South is inadequate to understand differences in literacy rates. In other words, the delineation into North and South indicated by HDI is a simplification - the actual situation is more complicated. 
 
-(The picture is more complicated than the one indicated by the delineation into north and south accomplished by HDI).
+Before this analysis can proceed, we first make an observation about the relationship between population density and literacy rates. Compare the plots of Population Density vs. Literacy Rate, and Log of Population Density vs. Literacy Rate. Observe that a line of best fit on the first plot would be exponential, while in the second, a line of best fit would be linear. This suggests that for the purposes of clustering, it would be appropriate to cluster Log of Population Density against Literacy Rate.
+
+
+
 ```{r}
 #JESSE
 #Creating a data table to perform a clustering analysis based on literacy rate and population density.
