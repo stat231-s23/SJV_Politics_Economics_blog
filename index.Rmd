@@ -91,7 +91,7 @@ In the world map below, countries are colored according to their Human Developme
 
 However, his map is quite one dimensional. Just what exactly does HDI tell us? What, in concrete terms, does "human development" mean? The goal of the following analysis is to shed light on HDI through other measures, in particular those related to literacy rates and population density.
 
-```{r, fig.align="left", out.width="100%", echo = FALSE}
+```{r, fig.align="left", out.width="100%"}
 gisco_countries <- gisco_get_countries() %>% select(-c(CNTR_ID, CNTR_NAME ,NAME_ENGL))
 unempData2 <- unempData %>% full_join(gisco_countries, by = c("CODE" = "ISO3_CODE"))
 ggplot(unempData2, aes(geometry=geometry, fill = Human.Development.Index)) +
