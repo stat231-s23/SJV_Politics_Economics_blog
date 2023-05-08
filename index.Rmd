@@ -51,21 +51,7 @@ This is an R Markdown blog template. This document will be knit to HTML to produ
 
 You can include text, `code`, and output as usual. Remember to take full advantage of Markdown and follow our [Style Guide](https://acstat231-f22.github.io/home/style-guide.html#Text_narration).
 
-```{r, fig.align="left", out.width="100%"}
-unempData <- read.csv("data/wrangled.csv")
-gisco_countries <- gisco_get_countries() %>% select(-c(CNTR_ID, CNTR_NAME ,NAME_ENGL))
-unempData2 <- unempData %>% full_join(gisco_countries, by = c("CODE" = "ISO3_CODE"))
-ggplot(unempData2, aes(geometry=geometry, fill = Human.Development.Index)) +
-  geom_sf() +
-  scale_fill_viridis(option = "turbo", direction = -1) + 
-  theme_void() + 
-  labs(
-    fill = "HDI",
-    title = "Human Development Index (HDI) of Countries",
-    subtitle = "2021",
-    caption = "Source: World Bank"
-  )
-```
+
 
 Examples and additional guidance are provided below. 
 
@@ -96,6 +82,25 @@ unempData1 %>% ggplot(aes(x = Expected.Years.of.Schooling, y = Human.Development
     color = "Continent"
   )
 
+```
+
+#Human Development Index (HDI) and Education
+*In the world map below, countries are colored according to their Human Development Index score. Each country is assigned an HDI score, a number between 0 and 1 designed, in a rough sense, to measure quality of life.
+
+```{r, fig.align="left", out.width="100%"}
+unempData <- read.csv("data/wrangled.csv")
+gisco_countries <- gisco_get_countries() %>% select(-c(CNTR_ID, CNTR_NAME ,NAME_ENGL))
+unempData2 <- unempData %>% full_join(gisco_countries, by = c("CODE" = "ISO3_CODE"))
+ggplot(unempData2, aes(geometry=geometry, fill = Human.Development.Index)) +
+  geom_sf() +
+  scale_fill_viridis(option = "turbo", direction = -1) + 
+  theme_void() + 
+  labs(
+    fill = "HDI",
+    title = "Human Development Index (HDI) of Countries",
+    subtitle = "2021",
+    caption = "Source: World Bank"
+  )
 ```
 
 ```{r}
