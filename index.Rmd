@@ -64,6 +64,7 @@ You can include [links](https://www.datadreaming.org/post/r-markdown-theme-galle
 
 You should include links to relevant sites as you write. You should additionally include a list of references as the end of your blog with full citations (and relevant links).
 ```{r, fig.align="left", out.width="100%"}
+unempData <- read.csv("data/wrangled.csv")
 lm_eqn <- function(df){
     m <- lm(Human.Development.Index ~ Expected.Years.of.Schooling, df);
     eq <- substitute(italic(y) == a + b %.% italic(x)*","~~italic(r)^2~"="~r2, 
@@ -85,10 +86,10 @@ unempData1 %>% ggplot(aes(x = Expected.Years.of.Schooling, y = Human.Development
 ```
 
 #Human Development Index (HDI) and Education
-*In the world map below, countries are colored according to their Human Development Index score. Each country is assigned an HDI score, a number between 0 and 1 designed, in a rough sense, to measure quality of life.
+
+In the world map below, countries are colored according to their Human Development Index score. Each country is assigned an HDI score, a number between 0 and 1 designed, in a rough sense, to measure quality of life.
 
 ```{r, fig.align="left", out.width="100%"}
-unempData <- read.csv("data/wrangled.csv")
 gisco_countries <- gisco_get_countries() %>% select(-c(CNTR_ID, CNTR_NAME ,NAME_ENGL))
 unempData2 <- unempData %>% full_join(gisco_countries, by = c("CODE" = "ISO3_CODE"))
 ggplot(unempData2, aes(geometry=geometry, fill = Human.Development.Index)) +
