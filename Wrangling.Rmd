@@ -90,6 +90,9 @@ for(i in 1:nrow(HDItable2)){
   }
 }
 
+LiteracyUnemployment <- UnemploymentWomen2021 %>%
+  select(-c(X1960, X1961, X1962, X1963, X1964, X1965, X1966, X1967, X1968, X1969, X1970, X1971, X1972, X1973, X1974))
+
 #This part is not working out very nicely.
 HDItable3 <- HDItable2 %>%
   left_join(UnemploymentTotal2, by = c("CODE" = "Country.Code")) %>%
