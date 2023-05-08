@@ -213,6 +213,25 @@ Literacy_density_scaled_with_countries <- Literacy_densityLog %>%
   drop_na()
 
 
+#Because the Literacy vs. Log(Density) plot is more spread out, it is better to cluster on Log(Density) instead of Density.And as we see below, this is the case. So it appears to make sense to cluster on Log(Density)
+
+#Literacy rate vs. Density plot: 
+ggplot(data = Literacy_density, aes(x = latestRate, y = density)) +
+             geom_point(size = 2) +
+            #Labels and title for the scatter plot
+             labs (y = "Population Density",
+                   x = "Literacy Rate",
+                   title = "Population Density vs. Literacy Rate")
+
+#Literacy rate vs. scaled Log(Density)
+ggplot(data = Literacy_density_scaled, aes(x = latestRate_scaled, y = density_scaled)) +
+             geom_point(size = 2) +
+            #Labels and title for the scatter plot
+             labs (y = "Population Density",
+                   x = "Literacy Rate",
+                   title = "Population Density vs. Literacy Rate")
+
+
 
 #to ensure the analysis is reproducible
 set.seed(23)
@@ -242,28 +261,9 @@ ggplot(elbow_plot, aes(x = k, y = tot.withinss)) +
 
 ```
 
+The elbow plot shows that a cluster analysis using three clusters is most appropriate. The plot below associates each country with one of three clusters. The first cluster, 1, consists of countries with high literacy rate and low population density. The second cluster, 2, consists of countries with high literacy rate and high density. The third cluster, 3, consists of countries with low literacy rate. Notice that this third cluster ranges over a wide variety of population densities. 
+
 ```{r}
-#JESSE 
-
-#Because the Literacy vs. Log(Density) plot is more spread out, it is better to cluster on Log(Density) instead of Density.And as we see below, this is the case. So it appears to make sense to cluster on Log(Density)
-
-#Literacy rate vs. Density plot: 
-ggplot(data = Literacy_density, aes(x = latestRate, y = density)) +
-             geom_point(size = 2) +
-            #Labels and title for the scatter plot
-             labs (y = "Population Density",
-                   x = "Literacy Rate",
-                   title = "Population Density vs. Literacy Rate")
-
-#Literacy rate vs. scaled Log(Density)
-ggplot(data = Literacy_density_scaled, aes(x = latestRate_scaled, y = density_scaled)) +
-             geom_point(size = 2) +
-            #Labels and title for the scatter plot
-             labs (y = "Population Density",
-                   x = "Literacy Rate",
-                   title = "Population Density vs. Literacy Rate")
-
-
 LD_kmeans2 <- Literacy_density_scaled %>%
   kmeans(centers = 3, nstart = 20)
 
@@ -291,7 +291,7 @@ ggplot(LD_augmented, aes(x = latestRate_scaled, y = density_scaled)) +
   theme_classic()
 
 ```
-
+The following map colors each country according to its cluster assignment. What is interesting about this map is that it shows how groups of contiguous countries are likely to fall into the same cluster. What does this mean? As an example, examine the pair of North African countries Algeria and Libya. These two countries are near the equator, and in our previous analysis, were part of the group described as the Global South. Here however, we can see that Algeria and Libya belong to a collection of countries with high literacy rate. 
 ```{r}
 Country_and_Clusters <- inner_join(Literacy_density_scaled_with_countries, LD_augmented, by = c("density_scaled" = "density_scaled")) %>%
   select(Country, .cluster)
