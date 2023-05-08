@@ -85,11 +85,13 @@ unempData1 %>% ggplot(aes(x = Expected.Years.of.Schooling, y = Human.Development
 
 ```
 
-#Human Development Index (HDI) and Education
+## Human Development Index (HDI) and Education
 
-In the world map below, countries are colored according to their Human Development Index score. Each country is assigned an HDI score, a number between 0 and 1 designed, in a rough sense, to measure quality of life.
+In the world map below, countries are colored according to their Human Development Index score. Each country is assigned an HDI score-a number between 0 and 1, designed, in a rough sense, to measure quality of life. Notice that countries further from the equator are more likely to have a high HDI score than countries closer to the equator. This trend shows up as a visual gradient on the map: the further from the equator, the higher the HDI score, the more blue the countries appear. But this is not a general rule. The term "Gloabl South" is often used to describe a collection of so-called "under-developed" countries near the equator and south of it, a collection which the map below suggests. 
 
-```{r, fig.align="left", out.width="100%"}
+However, his map is quite one dimensional. Just what exactly does HDI tell us? What, in concrete terms, does "human development" mean? The goal of the following analysis is to shed light on HDI through other measures, in particular those related to literacy rates and population density.
+
+```{r, fig.align="left", out.width="100%", echo = FALSE}
 gisco_countries <- gisco_get_countries() %>% select(-c(CNTR_ID, CNTR_NAME ,NAME_ENGL))
 unempData2 <- unempData %>% full_join(gisco_countries, by = c("CODE" = "ISO3_CODE"))
 ggplot(unempData2, aes(geometry=geometry, fill = Human.Development.Index)) +
