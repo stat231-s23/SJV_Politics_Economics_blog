@@ -72,7 +72,7 @@ Examples and additional guidance are provided below.
 Take note of the the default code chunk options in the `setup` code chunk. For example, unlike the rest of the Rmd files we worked in this semester, the default code chunk option is `echo = FALSE`, so you will need to set `echo  = TRUE` for any code chunks you would like to display in the blog. You should be thoughtful and intentional about the code you choose to display. 
 
 
-# Education
+# Education and the World: Literacy rates, Human Development Index, and their relationship
 
 You can include [links](https://www.datadreaming.org/post/r-markdown-theme-gallery/) using Markdown syntax as shown. 
 
@@ -95,6 +95,69 @@ unempData1 %>% ggplot(aes(x = Expected.Years.of.Schooling, y = Human.Development
     y = "Human Development Index",
     color = "Continent"
   )
+
+```
+
+```{r}
+Education_Literacy <- unempData %>%
+  select(region, Country, `Expected.Years.of.Schooling`, latestRate) %>%
+  drop_na() 
+
+#The "as.numeric" numeric function: https://www.educative.io/answers/what-is-the-asnumeric-function-in-r
+#What is happening with Europe?
+Education_Literacy_cor <- Education_Literacy %>%
+  group_by(region) %>%
+  summarize(r_education = cor(latestRate, as.numeric(`Expected.Years.of.Schooling`))) %>% 
+left_join(Education_Literacy, Education_Literacy_cor, by = c("region" = "region"))
+
+
+HDI_Literacy <-unempData %>%
+  select(region, Country, `Human.Development.Index`, latestRate) %>%
+  drop_na()
+
+HDI_Literacy_cor <- HDI_Literacy %>%
+  group_by(region) %>%
+  summarize(r_HDI = cor(latestRate, as.numeric(`Human.Development.Index`))) %>%
+  left_join(HDI_Literacy, HDI_Literacy_cor, by = c("region" = "region")) %>%
+  select(r_HDI, Country, `Human.Development.Index`)
+
+HDI_Education <- left_join(Education_Literacy_cor, HDI_Literacy_cor, by = c("Country" = "Country")) %>%
+  #negative means that education is a better predictor of literacy, positive means HDI is better.
+  mutate(diff = r_HDI - r_education)
+
+Density <- unempData %>%
+  select(Country, density)
+
+HDI_Education2 <- HDI_Education %>%
+  left_join(Density, HDI_Education, by = c("Country" = "Country"))
+
+
+```
+
+```{r}
+
+data(gapminder)
+
+world_map2 <- maps::map("world", plot = FALSE, fill = TRUE) %>% st_as_sf()
+
+HDI_Education_map <- HDI_Education2 %>%
+  right_join(world_map2, by = c("Country" = "ID"))
+
+
+##Plotting difference between r_education and r_HDI on a world map
+ggplot(HDI_Education_map, aes(geometry=geom, fill = diff)) +
+  geom_sf() +
+  theme_void() +
+  labs(fill = "Difference"
+       , title = "Where is HDI a better predictor of literacy rate than years of education?",
+       subtitle = "Years: 2021, 2023"
+       , caption = "Source: world bank data set") 
+
+
+#One problem with this initial analysis is that it is quite granular. However, the map does bring to light the delineation between the "Global North" and "Global South." In the southern hemisphere, the "Global South," HDI and education are nearly equal predictors of literacy rate. This tracks with the idea that in so-called "under-developed" regions of the world---and HDI *is* lower in the global south---obstacles to literacy are not purely educational. That is, in places where eduaction and HDI are comparable predictors of literacy, extra-educational aspects are predicting literacy rate. 
+
+
+
 
 ```
 
@@ -218,84 +281,7 @@ ggplot(Literacy_rate_cluster_map, aes(geometry=geom, fill = .cluster)) +
        , caption = "Source: world bank data set") 
 
 ```
-```{r}
-Education_Literacy <- unempData %>%
-  select(region, Country, `Expected.Years.of.Schooling`, latestRate) %>%
-  drop_na() 
 
-#The "as.numeric" numeric function: https://www.educative.io/answers/what-is-the-asnumeric-function-in-r
-#What is happening with Europe?
-Education_Literacy_cor <- Education_Literacy %>%
-  group_by(region) %>%
-  summarize(r_education = cor(latestRate, as.numeric(`Expected.Years.of.Schooling`))) %>% 
-left_join(Education_Literacy, Education_Literacy_cor, by = c("region" = "region"))
-
-
-HDI_Literacy <-unempData %>%
-  select(region, Country, `Human.Development.Index`, latestRate) %>%
-  drop_na()
-
-HDI_Literacy_cor <- HDI_Literacy %>%
-  group_by(region) %>%
-  summarize(r_HDI = cor(latestRate, as.numeric(`Human.Development.Index`))) %>%
-  left_join(HDI_Literacy, HDI_Literacy_cor, by = c("region" = "region")) %>%
-  select(r_HDI, Country, `Human.Development.Index`)
-
-HDI_Education <- left_join(Education_Literacy_cor, HDI_Literacy_cor, by = c("Country" = "Country")) %>%
-  #negative means that education is a better predictor of literacy, positive means HDI is better.
-  mutate(diff = r_HDI - r_education)
-
-Density <- unempData %>%
-  select(Country, density)
-
-HDI_Education2 <- HDI_Education %>%
-  left_join(Density, HDI_Education, by = c("Country" = "Country"))
-
-
-```
-
-```{r}
-
-data(gapminder)
-
-world_map2 <- maps::map("world", plot = FALSE, fill = TRUE) %>% st_as_sf()
-
-HDI_Education_map <- HDI_Education2 %>%
-  right_join(world_map2, by = c("Country" = "ID"))
-
-
-##Plotting difference between r_education and r_HDI on a world map
-ggplot(HDI_Education_map, aes(geometry=geom, fill = diff)) +
-  geom_sf() +
-  theme_void() +
-  labs(fill = "Difference"
-       , title = "Where is HDI a better predictor of literacy rate than years of education?",
-       subtitle = "Years: 2021, 2023"
-       , caption = "Source: world bank data set") 
-
-
-#One problem with this initial analysis is that it is quite granular. However, the map does bring to light the delineation between the "Global North" and "Global South." In the southern hemisphere, the "Global South," HDI and education are nearly equal predictors of literacy rate. This tracks with the idea that in so-called "under-developed" regions of the world---and HDI *is* lower in the global south---obstacles to literacy are not purely educational. That is, in places where eduaction and HDI are comparable predictors of literacy, extra-educational aspects are predicting literacy rate. 
-
-#Can I make a map of HDI in the world? Here it is!
-
-HDI_map <- unempData %>%
-  select(Country, `Human.Development.Index`)
-
-HDI_map2 <- HDI_map %>%
-  right_join(world_map2, by = c("Country" = "ID"))
-
-ggplot(HDI_map2, aes(geometry=geom, fill = as.numeric(`Human.Development.Index`))) +
-  geom_sf() +
-  theme_void() +
-  labs(fill = "Human Development Index"
-       , title = "HDI by country",
-       subtitle = "Years: "
-       , caption = "Source: World Bank data set") +
-  scale_fill_distiller(palette = "Spectral")  
-
-
-
-```
 ## Visualizations 
 
 Visualizations, particularly interactive ones, will be well-received. That said, do not overuse visualizations. You may be better off with one complicated but well-crafted visualization as opposed to many quick-and-dirty plots. Any plots should be well-thought-out, properly labeled, informative, and visually appealing.
