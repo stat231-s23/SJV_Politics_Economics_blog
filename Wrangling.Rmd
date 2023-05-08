@@ -18,6 +18,9 @@ LiteracyRate2023 <- read.csv("data/LiteracyRate2023.csv")
 
 Literacy <- select(LiteracyRate2023, "growthRate", "country", "region", "rank", "latestRate", "dataYear", "pop2023", "landAreaKm", "density")
 
+#https://data.worldbank.org/indicator/SE.ADT.LITR.ZS
+WorldBankLiteracy <- read.csv(header = TRUE, skip = 3, "data/WorldBankLiteracy.csv") 
+
 #found colnames function here: https://www.projectpro.io/recipes/change-column-headers-of-dataframe-r#:~:text=How%20to%20change%20column%20headers%20of%20a%20data%2Dframe%20in,can%20be%20changed%20at%20once.
 colnames(HDItable) <- c("HDI rank", "Country", "Human Development Index", "Empty", "Life Expectancy at Birth (years)", "Empty", "Expected Years of Schooling")
 
