@@ -46,9 +46,9 @@ You should include links to relevant sites as you write. You should additionally
 "The Human Development Index (HDI) is a summary measure of average achievement in key dimensions of human development: a long and healthy life, being knowledgeable and having a decent standard of living. The HDI is the geometric mean of normalized indices for each of the three dimensions."
 -[UN Development Program](https://hdr.undp.org/data-center/human-development-index#/indicies/HDI)
 
-In the world map below, countries are colored according to their Human Development Index score. Each country is assigned an HDI score-a number between 0 and 1, designed, in a rough sense, to measure quality of life. Notice that countries further from the equator are more likely to have a high HDI score than countries closer to the equator. This trend shows up as a visual gradient on the map: the further from the equator, the higher the HDI score, the more blue the countries appear. But this is not a general rule. The term "Gloabl South" is often used to describe a collection of so-called "under-developed" countries near the equator and south of it, a collection which the map below suggests. 
+In the world map below, countries are colored according to their Human Development Index score. Each country is assigned an HDI score - a number between 0 and 1, designed, in a rough sense, to measure quality of life. Notice that countries further from the equator are more likely to have a high HDI score than countries closer to the equator. This trend shows up as a visual gradient on the map: the further from the equator, the higher the HDI score, the more blue the countries appear. But this is not a general rule. The term "Gloabl South" is often used to describe a collection of so-called "under-developed" countries near the equator and south of it, a collection which the map below suggests. 
 
-However, his map is quite one dimensional. Just what exactly does HDI tell us? What, in concrete terms, does "human development" mean? The goal of the following analysis is to shed light on HDI through other measures, in particular those related to expected years of education, literacy rates, population density, and women's empowerment.
+However, this map is quite one dimensional. Just what exactly does HDI tell us? What, in concrete terms, does "human development" mean? The goal of the following analysis is to shed light on HDI and its limitations through other measures, in particular measures related to expected years of education, literacy rates, population density, and women's empowerment.
 
 ```{r, fig.align="left", out.width="100%", echo=FALSE}
 #turn wrangled data from csv to data frame
@@ -96,11 +96,11 @@ unempData %>% ggplot(aes(x = Expected.Years.of.Schooling, y = Human.Development.
 ```
 Note: The points that belong to the NA continent group are countries that were unsuccessfully matched with a continent during the data wrangling process.
 
-The linear regression of the plotted points has an $R^2$ of 0.802, supporting the assumption of a strong correlation between the two variables. However, there are clearly some other factors that must influence the HDI as we can see that Europe has more countries plotted over the regression while Africa has more countries plotted below the regression. Although we know the main factors that are used to measure HDI, these results point towards regional variables influencing of HDI (could be issues accessing resources, emigration, etc.). In the future, we'd be curious to explore what the issues common issues among the countries below the regression and common accomplishments among countries above the regression.
+The linear regression of the plotted points has an $R^2$ of 0.802, supporting the assumption of a strong correlation between the two variables. However, there are clearly some other factors that must influence the HDI, as we can see that Europe has more countries plotted over the regression while Africa has more countries plotted below the regression. Although we know the main factors that are used to measure HDI, these results point towards regional variables influencing of HDI (could be issues accessing resources, emigration, etc.). In the future, we'd be curious to explore the common issues among the countries below the regression and common accomplishments among countries above the regression.
 
 ## Chloropleth Comparison {.tabset}
 
-Below, we've included chloropleths of the expected years of education and HDI so they can be compared side by side. These chloropleths help the countries that are plotted further from the regression stand out because their more drastic change in shade from one graph to the other compared to some of the other countries' more nuanced changes.
+Below, we've included chloropleths of the expected years of education and HDI so they can be compared side by side. These chloropleths help the countries that are plotted further from the regression stand out because of their more drastic changes in shade from one graph to the other compared to some of the other countries' more nuanced changes.
 
 ### Education
 ```{r, fig.align="left", out.width="100%", echo = FALSE}
@@ -111,7 +111,7 @@ ggplot(unempData1, aes(geometry=geometry, fill = Expected.Years.of.Schooling)) +
   theme_void() + 
   labs(
     fill = "Years",
-    title = "Expected Lenght of Schooling in \nCountries Around the World",
+    title = "Expected Lenght of Schooling in Countries Around the World",
     subtitle = "2021",
     caption = "Source: World Bank"
   )
@@ -134,11 +134,11 @@ ggplot(unempData1, aes(geometry=geometry, fill = Human.Development.Index)) +
 
 # Literacy Rate and HDI
 
-We begin our inquiry into HDI and education by asking: Which is a better predictor of literacy rates - HDI, or average number of years of education? More over, what does it mean if HDI predicts literacy rates better than average number of years of education?
+We begin our inquiry into HDI and education by asking: Which is a better predictor of literacy rates - HDI, or average number of years of education? Moreover, what does it mean if HDI predicts literacy rates better than average number of years of education?
 
-For each country, we can find an expected number of years of schooling; this is the number of years  the average student attends school. In countries where the average years of schooling is higher, we expect to find higher average literacy rates. 
+For each country, we can find an expected number of years of schooling: this is the number of years the average student attends school. In countries where the average years of schooling is higher, we expect to find higher average literacy rates. 
 
-For each continent, we calculated two correlation coefficient. First, we found the correlation between HDI score and literacy rate; in other words, how well does HDI predict literacy rate for that continent. Second, we found the correlation between average years of education and literacy rate; in other words, how well does years of schooling predict literacy rate for that continent. 
+For each continent, we calculated two correlation coefficients. First, we found the correlation between HDI score and literacy rate; in other words, how well does HDI predict literacy rate for that continent. Second, we found the correlation between average years of education and literacy rate; in other words, how well does years of schooling predict literacy rate for that continent. 
 
 Next, for each continent, we found the difference between these two correlations. The interesting results are those where this difference is small. A small difference in these two values means that "development" is as good a predictor of literacy rates as years of education. A small difference indicates that non-educational "developmental" factors are influencing literacy rates.
 ```{r}
@@ -197,15 +197,9 @@ ggplot(HDI_Education_map, aes(geometry=geom, fill = diff)) +
        subtitle = "Years: 2021, 2023"
        , caption = "Source: world bank data set") 
 
-
-
-#One problem with this initial analysis is that it is quite granular. However, the map does bring to light the delineation between the "Global North" and "Global South." In the southern hemisphere, the "Global South," HDI and education are nearly equal predictors of literacy rate. This tracks with the idea that in so-called "under-developed" regions of the world---and HDI *is* lower in the global south---obstacles to literacy are not purely educational. That is, in places where eduaction and HDI are comparable predictors of literacy, extra-educational aspects are predicting literacy rate. 
-
-
-
-
 ```
-Observe that two continents, South America and Africa, are picked out as having a smaller difference. This means that in these two continents, extra educational factors are influencing literacy rates. This observation tracks with the delineation into "Global South" and "Global North" indicated by the plot of HDI. That is, the literacy rates of South America and Africa, continents situated in the Global South, suffer from extra-educational factors. 
+
+Observe that two continents, South America and Africa, are picked out as having a smaller difference. This means that in these two continents, extra-educational factors are influencing literacy rates. This observation tracks with the delineation into "Global South" and "Global North" indicated by the plot of HDI. That is, the literacy rates of South America and Africa, continents situated in the Global South, suffer from extra-educational factors. 
 
 One problem with this analysis is that it is not granular. It gives us a view of the world that is split into seven, when in reality, the world has far more than seven borders. 
 
@@ -316,6 +310,9 @@ ggplot(LD_augmented, aes(x = latestRate_scaled, y = density_scaled)) +
   theme_classic()
 
 ```
+
+Whereas HDI assigns a bare number to each country, the map below expresses relationships between a country's position, its population density, and its literacy rate. Notice the pockets of contries from the same cluster. Countries from a given cluster tend to be surrounded by others from the same cluster.
+
 The following map colors each country according to its cluster assignment. What is interesting about this map is that it shows how groups of contiguous countries are likely to fall into the same cluster. What does this mean? As an example, examine the pair of North African countries Algeria and Libya. These two countries are near the equator, and in our previous analysis, were part of the group described as the Global South. Here however, we can see that Algeria and Libya belong to a collection of countries with high literacy rate. 
 ```{r}
 Country_and_Clusters <- inner_join(Literacy_density_scaled_with_countries, LD_augmented, by = c("density_scaled" = "density_scaled")) %>%
@@ -335,6 +332,8 @@ ggplot(Literacy_rate_cluster_map, aes(geometry=geom, fill = .cluster)) +
        , caption = "Source: world bank data set") 
 
 ```
+
+Even though, in certain places, HDI is as good a predictor of literacy rate as years of education, this analysis obscures the fact that regional factors are at play. It simply is not the case that a single number - weather HDI or "Expected Years of Education" - can capture the whole situation regarding the literacy of a country. The reason for this is made clear by the map above: the situation regarding literacy in one country does not depend only on that country. Thus, numbers examining countries in isolation are largely incapable of expressing the sitation. The map above, in which pockets of similar countries emarge grouped together geographically, testifies to the reality of this interrelationship. HDI is an excellent tool for examining a country in its isolation. But comprehending the literacy situation in a given country, as the map above demonstrates, requires looking beyond the borders of that country.
 
 ## Visualizations 
 
