@@ -136,9 +136,9 @@ ggplot(unempData1, aes(geometry=geometry, fill = Human.Development.Index)) +
 
 We begin our inquiry into HDI and education by asking: Which is a better predictor of literacy rates - HDI, or average number of years of education? More over, what does it mean if HDI predicts literacy rates better than average number of years of education?
 
-For each country, we can find an expected number of years of schooling; this is the number of years  the average student attends school. In countries where the average years of schooling is higher, we expect to find higher average literacy rates. 
+For each country, we can find an expected number of years of schooling: this is the number of years the average student attends school. In countries where the average years of schooling is higher, we expect to find higher average literacy rates. 
 
-For each continent, we calculated two correlation coefficient. First, we found the correlation between HDI score and literacy rate; in other words, how well does HDI predict literacy rate for that continent. Second, we found the correlation between average years of education and literacy rate; in other words, how well does years of schooling predict literacy rate for that continent. 
+For each continent, we calculated two correlation coefficients. First, we found the correlation between HDI score and literacy rate; in other words, how well does HDI predict literacy rate for that continent. Second, we found the correlation between average years of education and literacy rate; in other words, how well does years of schooling predict literacy rate for that continent. 
 
 Next, for each continent, we found the difference between these two correlations. The interesting results are those where this difference is small. A small difference in these two values means that "development" is as good a predictor of literacy rates as years of education. A small difference indicates that non-educational "developmental" factors are influencing literacy rates.
 ```{r}
@@ -197,14 +197,8 @@ ggplot(HDI_Education_map, aes(geometry=geom, fill = diff)) +
        subtitle = "Years: 2021, 2023"
        , caption = "Source: world bank data set") 
 
-
-
-#One problem with this initial analysis is that it is quite granular. However, the map does bring to light the delineation between the "Global North" and "Global South." In the southern hemisphere, the "Global South," HDI and education are nearly equal predictors of literacy rate. This tracks with the idea that in so-called "under-developed" regions of the world---and HDI *is* lower in the global south---obstacles to literacy are not purely educational. That is, in places where eduaction and HDI are comparable predictors of literacy, extra-educational aspects are predicting literacy rate. 
-
-
-
-
 ```
+
 Observe that two continents, South America and Africa, are picked out as having a smaller difference. This means that in these two continents, extra-educational factors are influencing literacy rates. This observation tracks with the delineation into "Global South" and "Global North" indicated by the plot of HDI. That is, the literacy rates of South America and Africa, continents situated in the Global South, suffer from extra-educational factors. 
 
 One problem with this analysis is that it is not granular. It gives us a view of the world that is split into seven, when in reality, the world has far more than seven borders. 
