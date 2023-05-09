@@ -17,7 +17,7 @@ rank_choice_names <- c("High", "Medium", "Low", "All")
 ui <- fluidPage(
   
   # Application title
-  titlePanel("Women Empowerment"),
+  titlePanel("Gender Inequality Index"),
   
   sidebarPanel(
     # Sidebar with a radio input for number of bins 
@@ -25,7 +25,7 @@ ui <- fluidPage(
                  , label = "Choose the range:"
                  , choices = rank_choice_names
                  , selected = "All"),
-    "Showing the Gender Inequality Index. Higher Values correspond to more gender inequality."
+    "Higher values of Gender Inequality Index(GII) correspond to more gender inequality."
   ),
     # Show a plot of the generated distribution
     mainPanel(
@@ -59,21 +59,11 @@ server <- function(input, output) {
     return(vec)
   })
   
-  # Generate cartogram plot
   output$ChoroplethMap <- renderLeaflet({
     indicator <- as.numeric(indicatorMap$GII_value)
-    #rank <- as.numeric(indicatorMap[[input$rank]])
-    
-    #if (rank == "High") {
-    #  indicator_rescaled <- rescale(indicator, to = c(0.8, 1))
-   # } else if (rank == "Medium") {
-    #  indicator_rescaled <- rescale(indicator, to = c(0.5, 0.8))
-   # } else {
-    #  indicator_rescaled <- rescale(indicator, to = c(0, 0.5))
-   # }
     
     indicator_rescaled <- rescale(indicator, to = c(0, 1))
-    mypalette <- colorBin(c("blue"), domain = indicator_rescaled, bins = my_bins(), reverse = TRUE, na.color = "#FAF9F6")
+    mypalette <- colorBin(c("#F4BB44"), domain = indicator_rescaled, bins = my_bins(), reverse = TRUE, na.color = "#FAF9F6")
     
     leaflet() %>%
       addTiles() %>%

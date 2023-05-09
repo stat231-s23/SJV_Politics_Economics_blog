@@ -593,10 +593,9 @@ While countries with higher HDI ranks are generally associated with greater leve
 
 To gain a better understanding of the complex issues that women face worldwide, we will analyze standardized indicators of women's empowerment across countries based on their population and HDI rank. This analysis will reveal the factors that contribute to gender inequality and highlight areas for improvement to advance women's empowerment and create a more equitable society.
 
-```{r, echo=FALSE}
-# world map with GII indicators.
-
-
+```{r out.width = "100%", out.extra = 'data-external="1" frameborder="no"', fig.cap = "[Gender Inequality Index Map]( https://v01das-shreya-mathew.shinyapps.io/GenderInequalityIndex/"}
+knitr::include_app("https://v01das-shreya-mathew.shinyapps.io/GenderInequalityIndex/",
+                   height = "300px")
 ```
 ### Indicators of Women's Empowerment
 
