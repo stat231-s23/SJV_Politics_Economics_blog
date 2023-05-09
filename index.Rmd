@@ -26,13 +26,11 @@ library(purrr)
 library(giscoR)
 library(heatmaply)
 library(htmlwidgets)
-
 library(kableExtra)
 library(zoo)
 library(ggrepel)
 library(broom)
 library(GGally)
-library(sf)
 library(gapminder)
 ```
 
@@ -562,6 +560,90 @@ citation("DT")
 ```
 
 The following citations are based on the American Statistical Association citation style (not all of these references are used in this document).:
+
+# References
+
+## R Packages:
+
+Tidyverse:
+
+Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Hayes A, Henry L, Hester J, Kuhn M,
+  Pedersen TL, Miller E, Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K, Vaughan D, Wilke
+  C, Woo K, Yutani H (2019). “Welcome to the tidyverse.” _Journal of Open Source Software_, *4*(43), 1686.
+  doi:10.21105/joss.01686 <https://doi.org/10.21105/joss.01686>.
+
+Dplyr:
+
+Wickham H, François R, Henry L, Müller K, Vaughan D (2023). _dplyr: A Grammar of Data
+  Manipulation_. R package version 1.1.0, <https://CRAN.R-project.org/package=dplyr>.
+
+Sf:
+
+ Pebesma, E., 2018. Simple Features for R: Standardized Support for Spatial Vector Data. The R Journal 10 (1), 439-446, https://doi.org/10.32614/RJ-2018-009
+
+Viridis:
+
+Simon Garnier, Noam Ross, Robert Rudis, Antônio P. Camargo, Marco Sciaini, and Cédric Scherer (2021). Rvision - Colorblind-Friendly Color Maps for R. R package version 0.6.2.
+
+Maps:
+
+Becker OScbRA, Minka ARWRvbRBEbTP, Deckmyn. A (2022). _maps: Draw Geographical Maps_. R package version 3.4.1, <https://CRAN.R-project.org/package=maps>.
+
+Gglpot2:
+
+H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
+
+Purrr:
+
+Wickham H, Henry L (2023). _purrr: Functional Programming Tools_. R package version 1.0.1,
+  <https://CRAN.R-project.org/package=purrr>.
+
+Giscor:
+
+Hernangomez D (2023). giscoR: Download Map Data from GISCO API - Eurostat.
+  <https://doi.org/10.5281/zenodo.4317946>, <https://ropengov.github.io/giscoR/>
+
+Heatmaply:
+
+Tal Galili, Alan O'Callaghan, Jonathan Sidi, Carson Sievert; heatmaply: an R package for
+  creating interactive cluster heatmaps for online publishing, Bioinformatics, , btx657,
+  https://doi.org/10.1093/bioinformatics/btx657
+
+Htmlwidgets:
+
+Vaidyanathan R, Xie Y, Allaire J, Cheng J, Sievert C, Russell K (2023). _htmlwidgets: HTML
+  Widgets for R_. R package version 1.6.1, <https://CRAN.R-project.org/package=htmlwidgets>.
+
+Kableextra:
+
+Zhu H (2021). _kableExtra: Construct Complex Table with 'kable' and Pipe Syntax_. R package
+  version 1.3.4, <https://CRAN.R-project.org/package=kableExtra>.
+
+Zoo:
+
+Achim Zeileis and Gabor Grothendieck (2005). zoo: S3 Infrastructure for Regular and Irregular
+  Time Series. Journal of Statistical Software, 14(6), 1-27. doi:10.18637/jss.v014.i06
+
+Ggrepel:
+
+Slowikowski K (2023). _ggrepel: Automatically Position Non-Overlapping Text Labels with
+  'ggplot2'_. R package version 0.9.3, <https://CRAN.R-project.org/package=ggrepel>.
+
+Broom:
+
+Robinson D, Hayes A, Couch S (2023). _broom: Convert Statistical Objects into Tidy Tibbles_. R package version 1.0.3, <https://CRAN.R-project.org/package=broom>.
+
+Ggally:
+
+Schloerke B, Cook D, Larmarange J, Briatte F, Marbach M, Thoen E, Elberg A, Crowley J (2021). _GGally: Extension to 'ggplot2'_. R package version 2.1.2, <https://CRAN.R-project.org/package=GGally>.
+
+Gapminder:
+
+Bryan J (2023). _gapminder: Data from Gapminder_. R package version 1.0.0,
+  <https://CRAN.R-project.org/package=gapminder>.
+
+
+
 
 
 <!-- Textbook -->
