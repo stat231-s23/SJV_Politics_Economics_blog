@@ -227,9 +227,9 @@ ggplot(data = Literacy_density, aes(x = latestRate, y = density)) +
 ggplot(data = Literacy_density_scaled, aes(x = latestRate_scaled, y = density_scaled)) +
              geom_point(size = 2) +
             #Labels and title for the scatter plot
-             labs (y = "Log Population Density",
-                   x = "Literacy Rate",
-                   title = "Log Population Density vs. Literacy Rate")
+             labs (y = "Log Population Density, normalized",
+                   x = "Literacy Rate, normalized",
+                   title = "Log Population Density (normalized) vs. Literacy Rate (normalized)")
 
 
 
