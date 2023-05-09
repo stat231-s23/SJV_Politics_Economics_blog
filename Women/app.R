@@ -8,14 +8,10 @@ library(scales)
 load("Shreya.RData")
 
 # Define names of the variables
-indicator_choice_values <- c("Adol_birthrate", "Parliament", "Secondary", "LF_Part")
-indicator_choice_names <- c("Adolescent Birthrate", "Political Participation", "Secondary Education", "Labor Force Participation")
-names(indicator_choice_values) <- indicator_choice_names
-
-rank_choice_values <- c("High" = indicator_choice_values[indicator_choice_values >= 80], 
-                        "Medium" = indicator_choice_values[indicator_choice_values >= 50 & indicator_choice_values < 80],
-                        "Low" = indicator_choice_values[indicator_choice_values < 50])
-rank_choice_names <- c("Very High", "High", "Medium", "Low", "All")
+rank_choice_values <- c("High" = indicatorMap$GII_value >= 0.08, 
+                        "Medium" = indicatorMap$GII_value >= 0.04 & indicatorMap$GII_value >= 0.08,
+                        "Low" = indicatorMap$GII_valuee < 0.04)
+rank_choice_names <- c("High", "Medium", "Low", "All")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -23,35 +19,24 @@ ui <- fluidPage(
   # Application title
   titlePanel("Women Empowerment"),
   
-  # Sidebar with a slider input for number of bins 
-  sidebarLayout(
-    sidebarPanel(
-      selectInput(inputId = "indicator",
-                  label = "Choose an Indicator:",
-                  choices = indicator_choice_values,
-                  selected = "Adol_birthrate"),
-      ##############################################
-      radioButtons(inputId = "rank"
-                   , label = "Choose the range:"
-                   , choices = rank_choice_names
-                   , selected = "All"),
-    ),
-    
+  sidebarPanel(
+    # Sidebar with a radio input for number of bins 
+    radioButtons(inputId = "rank"
+                 , label = "Choose the range:"
+                 , choices = rank_choice_names
+                 , selected = "All"),
+    "Showing the Gender Inequality Index. Higher Values correspond to more gender inequality."
+  ),
     # Show a plot of the generated distribution
     mainPanel(
       leafletOutput(outputId = "ChoroplethMap")
     )
   )
-)
 
 # Define server logic required to generate cartogram plot
 server <- function(input, output) {
-  
-  
-  
 
-  
-  mytext <- paste(
+    mytext <- paste(
     "Country: ", indicatorMap$Country, "<br/>",
     "Adolescent BirthRate: ", indicatorMap$Adol_birthrate, "<br/>",
     "Political Participation: ", indicatorMap$Parliament, "<br/>",
@@ -59,19 +44,16 @@ server <- function(input, output) {
     sep = ""
   ) %>%
     lapply(htmltools::HTML)
-  
+
   my_bins <- reactive({
     if("Low" == input$rank ) {
       return(c(0, 0.3))
     }
     if("Medium"== input$rank) {
-      return(c(0.3, 0.5))
+      return(c(0.3, 0.7))
     }
     if("High"== input$rank) {
-      return(c(0.5, 0.8))
-    }
-    if("Very High"== input$rank) {
-      return(c(0.8, 1.0))
+      return(c(0.7, 1.0))
     }
     vec <- c(0, 1.0)
     return(vec)
@@ -79,7 +61,7 @@ server <- function(input, output) {
   
   # Generate cartogram plot
   output$ChoroplethMap <- renderLeaflet({
-    indicator <- as.numeric(indicatorMap[[input$indicator]])
+    indicator <- as.numeric(indicatorMap$GII_value)
     #rank <- as.numeric(indicatorMap[[input$rank]])
     
     #if (rank == "High") {
@@ -91,7 +73,7 @@ server <- function(input, output) {
    # }
     
     indicator_rescaled <- rescale(indicator, to = c(0, 1))
-    mypalette <- colorBin(c("green"), domain = indicator_rescaled, bins = my_bins(), reverse = TRUE, na.color = "#FAF9F6")
+    mypalette <- colorBin(c("blue"), domain = indicator_rescaled, bins = my_bins(), reverse = TRUE, na.color = "#FAF9F6")
     
     leaflet() %>%
       addTiles() %>%
