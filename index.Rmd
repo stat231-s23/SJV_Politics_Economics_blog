@@ -96,7 +96,7 @@ unempData %>% ggplot(aes(x = Expected.Years.of.Schooling, y = Human.Development.
 ```
 Note: The points that belong to the NA continent group are countries that were unsuccessfully matched with a continent during the data wrangling process.
 
-The linear regression of the plotted points has an $R^2$ of 0.802, supporting the assumption of a strong correlation between the two variables. However, there are clearly some other factors that must influence the HDI, as we can see that Europe has more countries plotted over the regression while Africa has more countries plotted below the regression. Although we know the main factors that are used to measure HDI, these results point towards regional variables influencing of HDI (could be issues accessing resources, emigration, etc.). In the future, we'd be curious to explore what the issues common issues among the countries below the regression and common accomplishments among countries above the regression.
+The linear regression of the plotted points has an $R^2$ of 0.802, supporting the assumption of a strong correlation between the two variables. However, there are clearly some other factors that must influence the HDI, as we can see that Europe has more countries plotted over the regression while Africa has more countries plotted below the regression. Although we know the main factors that are used to measure HDI, these results point towards regional variables influencing of HDI (could be issues accessing resources, emigration, etc.). In the future, we'd be curious to explore what the common issues among the countries below the regression and common accomplishments among countries above the regression.
 
 ## Chloropleth Comparison {.tabset}
 
