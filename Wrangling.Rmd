@@ -10,10 +10,20 @@ library(fuzzyjoin)
 ```{r}
 #CSV to table
 #Bringing all the data sets into R.
+
+#https://hdr.undp.org/data-center/human-development-index#/indicies/HDI
 HDItable <- read.csv("data/HDR21-22Table 1.csv", skip =6, head = TRUE)
+
+#https://www.oecd.org/migration/mig/34107835.xls
 oecdAbbreviations <- read.csv("data/oecdAbbreviations.csv")
+
+#https://data.worldbank.org/indicator/SL.UEM.TOTL.ZS
 UnemploymentTotal2021 <- read.csv(header = TRUE, skip = 3, "data/2021WorldBankUnemploymentData.csv")
+
+#https://data.worldbank.org/indicator/SL.UEM.TOTL.FE.ZS
 UnemploymentWomen2021 <- read.csv(header = TRUE, skip = 3, "data/2021WorldBankUnemploymentDataWomen.csv")
+
+#https://worldpopulationreview.com/country-rankings/literacy-rate-by-country
 LiteracyRate2023 <- read.csv("data/LiteracyRate2023.csv")
 
 Literacy <- select(LiteracyRate2023, "growthRate", "country", "region", "rank", "latestRate", "dataYear", "pop2023", "landAreaKm", "density")
