@@ -100,7 +100,7 @@ The linear regression of the plotted points has an $R^2$ of 0.802, supporting th
 
 ## Chloropleth Comparison {.tabset}
 
-Below, we've included chloropleths of the expected years of education and HDI so they can be compared side by side. These chloropleths help the countries that are plotted further from the regression stand out because their more drastic change in shade from one graph to the other compared to some of the other countries' more nuanced changes.
+Below, we've included chloropleths of the expected years of education and HDI so they can be compared side by side. These chloropleths help the countries that are plotted further from the regression stand out because of their more drastic changes in shade from one graph to the other compared to some of the other countries' more nuanced changes.
 
 ### Education
 ```{r, fig.align="left", out.width="100%", echo = FALSE}
@@ -111,7 +111,7 @@ ggplot(unempData1, aes(geometry=geometry, fill = Expected.Years.of.Schooling)) +
   theme_void() + 
   labs(
     fill = "Years",
-    title = "Expected Lenght of Schooling in \nCountries Around the World",
+    title = "Expected Lenght of Schooling in Countries Around the World",
     subtitle = "2021",
     caption = "Source: World Bank"
   )
