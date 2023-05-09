@@ -311,6 +311,8 @@ ggplot(LD_augmented, aes(x = latestRate_scaled, y = density_scaled)) +
 
 ```
 
+Whereas HDI assigns a bare number to each country, the map below expresses relationships between a country's position, its population density, and its literacy rate. Notice the pockets of contries from the same cluster. Countries from a given cluster tend to be surrounded by others from the same cluster.
+
 The following map colors each country according to its cluster assignment. What is interesting about this map is that it shows how groups of contiguous countries are likely to fall into the same cluster. What does this mean? As an example, examine the pair of North African countries Algeria and Libya. These two countries are near the equator, and in our previous analysis, were part of the group described as the Global South. Here however, we can see that Algeria and Libya belong to a collection of countries with high literacy rate. 
 ```{r}
 Country_and_Clusters <- inner_join(Literacy_density_scaled_with_countries, LD_augmented, by = c("density_scaled" = "density_scaled")) %>%
