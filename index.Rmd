@@ -280,7 +280,7 @@ ggplot(elbow_plot, aes(x = k, y = tot.withinss)) +
 
 The elbow plot shows that a cluster analysis using three clusters is most appropriate. The plot below associates each country with one of three clusters. The first cluster, 1, consists of countries with high literacy rate and low population density. The second cluster, 2, consists of countries with high literacy rate and high density. The third cluster, 3, consists of countries with low literacy rate. Notice that this third cluster ranges over a wide variety of population densities. 
 
-```{r}
+```{r, echo = FALSE}
 LD_kmeans2 <- Literacy_density_scaled %>%
   kmeans(centers = 3, nstart = 20)
 
