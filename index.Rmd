@@ -291,7 +291,11 @@ ggplot(LD_augmented, aes(x = latestRate_scaled, y = density_scaled)) +
   theme_classic()
 
 ```
-The following map colors each country according to its cluster assignment. What is interesting about this map is that it shows how groups of contiguous countries are likely to fall into the same cluster. What does this mean? As an example, examine the pair of North African countries Algeria and Libya. These two countries are near the equator, and in our previous analysis, were part of the group described as the Global South. Here however, we can see that Algeria and Libya belong to a collection of countries with high literacy rate. 
+The following map colors each country according to its cluster assignment. What is interesting about this map is that it shows how groups of contiguous countries are likely to fall into the same cluster. What does this mean? As an example, examine the pair of North African countries, Algeria and Libya. These two countries are near the equator, and in our previous analysis, were part of the group described as the Global South. 
+
+Whereas HDI assigns a bare number to each country, the map below expresses relationships between a country's position, its population density, and its literacy rate. Notice that there are pockets of contries from the same cluster, that is, contries from a given cluster tend to be surrounded by others from the same cluster.
+
+
 ```{r}
 Country_and_Clusters <- inner_join(Literacy_density_scaled_with_countries, LD_augmented, by = c("density_scaled" = "density_scaled")) %>%
   select(Country, .cluster)
@@ -310,6 +314,7 @@ ggplot(Literacy_rate_cluster_map, aes(geometry=geom, fill = .cluster)) +
        , caption = "Source: world bank data set") 
 
 ```
+Even though, in certain places, HDI is as good a predictor of literacy rate as years of education, this analysis obscures the fact that regional factors are at play. It simply is not the case that a single number, weather HDI or expected years of education, can capture the whole situation regarding the literacy of a country. The reason for this is made clear by the map below: the situation regarding literacy in one country does not depend only on that country - so numbers examining countries in isolation are wont to express the sitation. The map below, in which pockets of similar countries emarge geographically grouped together, testifies to this interrelationship. HDI is an excellent tool for examining a country in its isolation. But comprehending the literacy situation in a given country, as the map above demonstrates, requires looking beyond the borders of that country
 
 ## Visualizations 
 
