@@ -205,7 +205,7 @@ ggplot(HDI_Education_map, aes(geometry=geom, fill = diff)) +
 
 
 ```
-Observe that two continents, South America and Africa, are picked out as having a smaller difference. This means that in these two continents, extra educational factors are influencing literacy rates. This observation tracks with the delineation into "Global South" and "Global North" indicated by the plot of HDI. That is, the literacy rates of South America and Africa, continents situated in the Global South, suffer from extra-educational factors. 
+Observe that two continents, South America and Africa, are picked out as having a smaller difference. This means that in these two continents, extra-educational factors are influencing literacy rates. This observation tracks with the delineation into "Global South" and "Global North" indicated by the plot of HDI. That is, the literacy rates of South America and Africa, continents situated in the Global South, suffer from extra-educational factors. 
 
 One problem with this analysis is that it is not granular. It gives us a view of the world that is split into seven, when in reality, the world has far more than seven borders. 
 
@@ -316,6 +316,7 @@ ggplot(LD_augmented, aes(x = latestRate_scaled, y = density_scaled)) +
   theme_classic()
 
 ```
+
 The following map colors each country according to its cluster assignment. What is interesting about this map is that it shows how groups of contiguous countries are likely to fall into the same cluster. What does this mean? As an example, examine the pair of North African countries Algeria and Libya. These two countries are near the equator, and in our previous analysis, were part of the group described as the Global South. Here however, we can see that Algeria and Libya belong to a collection of countries with high literacy rate. 
 ```{r}
 Country_and_Clusters <- inner_join(Literacy_density_scaled_with_countries, LD_augmented, by = c("density_scaled" = "density_scaled")) %>%
