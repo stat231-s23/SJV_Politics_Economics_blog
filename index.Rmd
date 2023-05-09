@@ -87,9 +87,9 @@ unempData1 %>% ggplot(aes(x = Expected.Years.of.Schooling, y = Human.Development
 
 ## Human Development Index (HDI) and Education
 
-In the world map below, countries are colored according to their Human Development Index score. Each country is assigned an HDI score-a number between 0 and 1, designed, in a rough sense, to measure quality of life. Notice that countries further from the equator are more likely to have a high HDI score than countries closer to the equator. This trend shows up as a visual gradient on the map: the further from the equator, the higher the HDI score, the more blue the countries appear. But this is not a general rule. The term "Gloabl South" is often used to describe a collection of so-called "under-developed" countries near the equator and south of it, a collection which the map below suggests. 
+In the world map below, countries are colored according to their Human Development Index score. Each country is assigned an HDI score - a number between 0 and 1, designed, in a rough sense, to measure quality of life. Notice that countries further from the equator are more likely to have a high HDI score than countries closer to the equator. This trend shows up as a visual gradient on the map: the further from the equator, the higher the HDI score, the more blue the countries appear. But this is not a general rule. The term "Gloabl South" is often used to describe a collection of so-called "under-developed" countries near the equator and south of it, a collection which the map below suggests. 
 
-However, his map is quite one dimensional. Just what exactly does HDI tell us? What, in concrete terms, does "human development" mean? The goal of the following analysis is to shed light on HDI through other measures, in particular those related to literacy rates and population density.
+However, this map is quite one dimensional. Just what exactly does HDI tell us? What, in concrete terms, does "human development" mean? The goal of the following analysis is to shed light on HDI and its limitations through other measures, in particular measures related to literacy rates and population density.
 
 ```{r, fig.align="left", out.width="100%"}
 gisco_countries <- gisco_get_countries() %>% select(-c(CNTR_ID, CNTR_NAME ,NAME_ENGL))
@@ -109,11 +109,11 @@ ggplot(unempData2, aes(geometry=geometry, fill = Human.Development.Index)) +
 
 # Literacy Rate and HDI
 
-We begin our inquiry into HDI and education by asking: Which is a better predictor of literacy rates - HDI, or average number of years of education? More over, what does it mean if HDI predicts literacy rates better than average number of years of education?
+We begin our inquiry into HDI and education by asking: Which is a better predictor of literacy rates - HDI, or average number of years of education? Moreover, what does it mean if HDI predicts literacy rates better than average number of years of education?
 
 For each country, we can find an expected number of years of schooling; this is the number of years  the average student attends school. In countries where the average years of schooling is higher, we expect to find higher average literacy rates. 
 
-For each continent, we calculated two correlation coefficient. First, we found the correlation between HDI score and literacy rate; in other words, how well does HDI predict literacy rate for that continent. Second, we found the correlation between average years of education and literacy rate; in other words, how well does years of schooling predict literacy rate for that continent. 
+For each continent, we calculated two correlation coefficients. First, we found the correlation between HDI score and literacy rate; in other words, how well does HDI predict literacy rate for that continent. Second, we found the correlation between average years of education and literacy rate; in other words, how well does years of schooling predict literacy rate for that continent. 
 
 Next, for each continent, we found the difference between these two correlations. The interesting results are those where this difference is small. A small difference in these two values means that "development" is as good a predictor of literacy rates as years of education. A small difference indicates that non-educational "developmental" factors are influencing literacy rates.
 ```{r}
@@ -180,13 +180,13 @@ ggplot(HDI_Education_map, aes(geometry=geom, fill = diff)) +
 
 
 ```
-Observe that two continents, South America and Africa, are picked out as having a smaller difference. This means that in these two continents, extra educational factors are influencing literacy rates. This observation tracks with the delineation into "Global South" and "Global North" indicated by the plot of HDI. That is, the literacy rates of South America and Africa, continents situated in the Global South, suffer from extra-educational factors. 
+Observe that two continents, South America and Africa, are picked out as having a smaller difference. This means that in these two continents, extra-educational factors are influencing literacy rates. This observation tracks with the delineation into "Global South" and "Global North" indicated by the plot of HDI. That is, the literacy rates of South America and Africa, continents situated in the Global South, suffer from extra-educational factors. Indeed, the Global South consists of nations which have suffered the effects of capitalist globalization (https://onlineacademiccommunity.uvic.ca/globalsouthpolitics/2018/08/08/global-south-what-does-it-mean-and-why-use-the-term/). Among the effects of this phenomenon may be harm to the literary sitation of effected nations.
 
 One problem with this analysis is that it is not granular. It gives us a view of the world that is split into seven, when in reality, the world has far more than seven borders. 
 
 Our next analysis clusters countries according to literacy rate and population density. The goal of the analysis is to show that the division into Global North and Global South is inadequate to understand differences in literacy rates. In other words, the delineation into North and South indicated by HDI is a simplification - the actual situation is more complicated. 
 
-Before this analysis can proceed, we first make an observation about the relationship between population density and literacy rates. Compare the plots of Population Density vs. Literacy Rate, and Log of Population Density vs. Literacy Rate. Observe that a line of best fit on the first plot would be exponential, while in the second, a line of best fit would be linear. This suggests that for the purposes of clustering, it would be appropriate to cluster Log of Population Density against Literacy Rate.
+Before this analysis can proceed, we first make an observation about the relationship between population density and literacy rates. Compare the plot of Population Density vs. Literacy Rate, with the plot of Log of Population Density vs. Literacy Rate. Observe that a line of best fit on the first plot would be exponential, while in the second, a line of best fit would be linear. This suggests that for the purposes of clustering, it would be appropriate to cluster Log of Population Density against Literacy Rate.
 
 
 
@@ -227,9 +227,9 @@ ggplot(data = Literacy_density, aes(x = latestRate, y = density)) +
 ggplot(data = Literacy_density_scaled, aes(x = latestRate_scaled, y = density_scaled)) +
              geom_point(size = 2) +
             #Labels and title for the scatter plot
-             labs (y = "Population Density",
+             labs (y = "Log Population Density",
                    x = "Literacy Rate",
-                   title = "Population Density vs. Literacy Rate")
+                   title = "Log Population Density vs. Literacy Rate")
 
 
 
@@ -291,11 +291,12 @@ ggplot(LD_augmented, aes(x = latestRate_scaled, y = density_scaled)) +
   theme_classic()
 
 ```
+
 The following map colors each country according to its cluster assignment. What is interesting about this map is that it shows how groups of contiguous countries are likely to fall into the same cluster. What does this mean? As an example, examine the pair of North African countries, Algeria and Libya. These two countries are near the equator, and in our previous analysis, were part of the group described as the Global South. 
 
-Whereas HDI assigns a bare number to each country, the map below expresses relationships between a country's position, its population density, and its literacy rate. Notice that there are pockets of contries from the same cluster, that is, contries from a given cluster tend to be surrounded by others from the same cluster.
+Whereas HDI assigns a bare number to each country, the map below expresses relationships between a country's position, its population density, and its literacy rate. Notice the pockets of contries from the same cluster. Countries from a given cluster tend to be surrounded by others from the same cluster.
 
-Algeria and Libya are countries within the same cluster, number 1, high literacy rate and low population density. Notice that these two contiguous countries share a common situation with respect to literacy. And Algeria and Libya are just an example. Throughout the map below, groups of contiguous countries tend to fall within the same cluster. This indicates: the assignment of a country to a particular cluster does not depend only on the circumstances within that country; it depends also on the broader regional context in which a country is situated.
+Algeria and Libya are countries within the same cluster - number 1, high literacy rate and low population density. Notice that these two contiguous countries share a common situation with respect to literacy. And Algeria and Libya are just an example. Throughout the map below, groups of contiguous countries tend to fall within the same cluster. This indicates: the assignment of a country to a particular cluster does not depend only on the circumstances within that country; it depends also on the broader regional context in which a country is situated.
 ```{r}
 Country_and_Clusters <- inner_join(Literacy_density_scaled_with_countries, LD_augmented, by = c("density_scaled" = "density_scaled")) %>%
   select(Country, .cluster)
@@ -314,7 +315,8 @@ ggplot(Literacy_rate_cluster_map, aes(geometry=geom, fill = .cluster)) +
        , caption = "Source: world bank data set") 
 
 ```
-Even though, in certain places, HDI is as good a predictor of literacy rate as years of education, this analysis obscures the fact that regional factors are at play. It simply is not the case that a single number - weather HDI or "Expected Years of Education" - can capture the whole situation regarding the literacy of a country. The reason for this is made clear by the map above: the situation regarding literacy in one country does not depend only on that country. Thus, numbers examining countries in isolation are incapable of expressing the sitation. The map above, in which pockets of similar countries emarge grouped together geographically, testifies to the reality of this interrelationship. HDI is an excellent tool for examining a country in its isolation. But comprehending the literacy situation in a given country, as the map above demonstrates, requires looking beyond the borders of that country.
+
+Even though, in certain places, HDI is as good a predictor of literacy rate as years of education, this analysis obscures the fact that regional factors are at play. It simply is not the case that a single number - weather HDI or "Expected Years of Education" - can capture the whole situation regarding the literacy of a country. The reason for this is made clear by the map above: the situation regarding literacy in one country does not depend only on that country. Thus, numbers examining countries in isolation are largely incapable of expressing the sitation. The map above, in which pockets of similar countries emarge grouped together geographically, testifies to the reality of this interrelationship. HDI is an excellent tool for examining a country in its isolation. But comprehending the literacy situation in a given country, as the map above demonstrates, requires looking beyond the borders of that country.
 
 ## Visualizations 
 
