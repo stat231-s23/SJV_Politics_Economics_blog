@@ -339,12 +339,15 @@ Amartya Sen, a Nobel laureate and renowned economist, once said, "empowering wom
 
 While countries with higher HDI ranks are generally associated with greater levels of freedom and empowerment, the reality is more complex. For instance, a country's overall HDI score may mask significant disparities in gender inequality within its population. In many countries, women continue to face discrimination in areas such as education, employment, and political representation, despite their nation's high HDI ranking. Moreover, the cultural and social norms prevalent in a country can significantly impact the empowerment of women, even in countries with high HDI scores. Therefore, while HDI rankings can provide a broad measure of a country's level of human development, it is crucial to examine specific indicators that measure the empowerment of women to gain a more nuanced understanding of gender inequality across the globe.
 
-To gain a better understanding of the complex issues that women face worldwide, we will analyze standardized indicators of women's empowerment across countries based on their population and HDI rank. This analysis will reveal the factors that contribute to gender inequality and highlight areas for improvement to advance women's empowerment and create a more equitable society.
+To gain a better understanding of the complex issues that women face worldwide, we will analyze standardized indicators of women's empowerment across countries based on their population and HDI rank. This analysis will reveal the factors that contribute to gender inequality and highlight areas for improvement to advance women's empowerment and create a more equitable society. 
 
-```{r out.width = "100%", out.extra = 'data-external="1" frameborder="no"', fig.cap = "[Gender Inequality Index Map]( https://v01das-shreya-mathew.shinyapps.io/GenderInequalityIndex/"}
+```{r out.width = "150%", out.extra = 'data-external="1" frameborder="no"', fig.cap = "[Gender Inequality Index Map]( https://v01das-shreya-mathew.shinyapps.io/GenderInequalityIndex/"}
 knitr::include_app("https://v01das-shreya-mathew.shinyapps.io/GenderInequalityIndex/",
-                   height = "300px")
+                   height = "500px")
 ```
+
+The map shows Gender Inequality Index (GII) across the world, which is a composite measure of gender disparities in health, education, and economic and political participation. It is designed to reflect the gender-based inequalities that hinder the development of a society and limit the capabilities of individuals. Some of the factors that is used to measure GII is used in our futher analysis.
+
 ### Indicators of Women's Empowerment
 
 We will look into four key indicators of Women's Empowement measure
