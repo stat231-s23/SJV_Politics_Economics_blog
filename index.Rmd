@@ -378,6 +378,21 @@ This suggests that factors other than development, such as cultural and social n
 
 * The education level column of the heatmap, specifically reflecting the metric of women's completion of secondary education, shows a positive correlation with HDI. In general, countries with higher HDI rankings tend to have higher rates of women completing secondary education, indicating greater access to educational opportunities and greater potential for personal and professional growth. However, there are exceptions to this trend. One such exception is Ethiopia, which ranks relatively high in the HDI spectrum but has very low rates of women completing secondary education. This indicates that while Ethiopia has made progress in areas such as healthcare and income, it may face challenges in ensuring equal access to education for women.
 
+
+# Findings and Limitations:
+
+## Findings:
+
+We found that there is a strong correlation between education and HDI. To find this correlation, we grouped by continent. Because several continents appear either above or below the line of best fit, there are regional factors at play in the relationship between education and HDI. 
+	We also found that in order to understand literacy rate within a country, it is necessary to look at the regional context of that country. Thus, HDI - a measure of circumstances within a country - seems incommensurate with the task of understanding literacy rates in the world.
+	Finally, even though HDI is considered to be a uniform measurement for development across the world, we found it does not address all aspects of development. As we discussed in the case for women empowerment, many countries with a high HDI score have a poor record in terms of indicators of women empowerment. 
+
+## Limitations:
+
+Even though there is a strong correlation between education and HDI, we cannot establish a causal relationship between the two variables. We would need to conduct further research to find out what, if any, actual causal relationship is at play. A more significant limitation of our analysis is the time frame captured by our data. Our HDI data only were from the year 2021. Worse, when it came to data on literacy by country, the years for most recent data were scattered. Evidently it is hard to collect reliable statistics on literacy rate. This meant that for many countries, the most recent literacy rate statistic was not, in fact, all that recent.
+
+
+
 # References
 
 ## R Packages:
