@@ -125,7 +125,7 @@ ggplot(unempData1, aes(geometry=geometry, fill = Human.Development.Index)) +
 
 # Literacy Rate and HDI
 
-We begin our inquiry into HDI and education by asking: Which is a better predictor of literacy rates - HDI, or average number of years of education? Moreover, what does it mean if HDI predicts literacy rates better than average number of years of education?
+We continue our inquiry into HDI and education by asking: Which is a better predictor of literacy rates - HDI, or average number of years of education? Moreover, what does it mean if HDI predicts literacy rates better than average number of years of education?
 
 For each country, we can find an expected number of years of schooling: this is the number of years the average student attends school. In countries where the average years of schooling is higher, we expect to find higher average literacy rates. 
 
@@ -186,7 +186,7 @@ ggplot(HDI_Education_map, aes(geometry=geom, fill = diff)) +
   labs(fill = "Difference"
        , title = "Where is HDI a better predictor of literacy rate than years of education?",
        subtitle = "Years: 2021, 2023"
-       , caption = "Source: world bank data set") 
+       , caption = "Source: World Bank") 
 
 ```
 
@@ -200,7 +200,7 @@ Before this analysis can proceed, we first make an observation about the relatio
 
 
 
-```{r}
+```{r, echo = FALSE}
 #JESSE
 #Creating a data table to perform a clustering analysis based on literacy rate and population density.
 Literacy_density <- unempData %>%
