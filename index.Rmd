@@ -34,17 +34,10 @@ library(GGally)
 library(gapminder)
 ```
 
-# Education and the World: Literacy rates, Human Development Index, and their relationship
-
-
-You can include [links](https://www.datadreaming.org/post/r-markdown-theme-gallery/) using Markdown syntax as shown. 
-
-You should include links to relevant sites as you write. You should additionally include a list of references as the end of your blog with full citations (and relevant links).
-
 "The Human Development Index (HDI) is a summary measure of average achievement in key dimensions of human development: a long and healthy life, being knowledgeable and having a decent standard of living. The HDI is the geometric mean of normalized indices for each of the three dimensions."
 -[UN Development Program](https://hdr.undp.org/data-center/human-development-index#/indicies/HDI)
 
-In the world map below, countries are colored according to their Human Development Index score. Each country is assigned an HDI score - a number between 0 and 1, designed, in a rough sense, to measure quality of life. Notice that countries further from the equator are more likely to have a high HDI score than countries closer to the equator. This trend shows up as a visual gradient on the map: the further from the equator, the higher the HDI score, the more blue the countries appear. But this is not a general rule. The term "Gloabl South" is often used to describe a collection of so-called "under-developed" countries near the equator and south of it, a collection which the map below suggests. 
+In the world map below, countries are colored according to their Human Development Index score. Each country is assigned an HDI score - a number between 0 and 1, designed, in a rough sense, to measure quality of life. Notice that countries further from the equator are more likely to have a high HDI score than countries closer to the equator. This trend shows up as a visual gradient on the map: the further from the equator, the higher the HDI score, the more blue the countries appear. But this is not a general rule. The term ["Gloabl South"](https://globalsouthstudies.as.virginia.edu/what-is-global-south) is often used to describe a collection of so-called "under-developed" countries near the equator and south of it, a collection which the map below suggests. 
 
 However, this map is quite one dimensional. Just what exactly does HDI tell us? What, in concrete terms, does "human development" mean? The goal of the following analysis is to shed light on HDI and its limitations through other measures, in particular measures related to expected years of education, literacy rates, population density, and women's empowerment.
 
