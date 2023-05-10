@@ -133,12 +133,12 @@ For each continent, we calculated two correlation coefficients. First, we found 
 
 Next, for each continent, we found the difference between these two correlations. The interesting results are those where this difference is small. A small difference in these two values means that "development" is as good a predictor of literacy rates as years of education. A small difference indicates that non-educational "developmental" factors are influencing literacy rates.
 ```{r}
+#Calculating correlation coeffiecents between HDI and literacy and Educatio and Literacy
 Education_Literacy <- unempData %>%
   select(region, Country, `Expected.Years.of.Schooling`, latestRate) %>%
   drop_na() 
 
 #The "as.numeric" numeric function: https://www.educative.io/answers/what-is-the-asnumeric-function-in-r
-#What is happening with Europe?
 Education_Literacy_cor <- Education_Literacy %>%
   group_by(region) %>%
   summarize(r_education = cor(latestRate, as.numeric(`Expected.Years.of.Schooling`))) %>% 
@@ -149,6 +149,7 @@ HDI_Literacy <-unempData %>%
   select(region, Country, `Human.Development.Index`, latestRate) %>%
   drop_na()
 
+#Correlation between HDI and Literacy rate
 HDI_Literacy_cor <- HDI_Literacy %>%
   group_by(region) %>%
   summarize(r_HDI = cor(latestRate, as.numeric(`Human.Development.Index`))) %>%
@@ -162,6 +163,7 @@ HDI_Education <- left_join(Education_Literacy_cor, HDI_Literacy_cor, by = c("Cou
 Density <- unempData %>%
   select(Country, density)
 
+#The data frame used for the map of the difference between the two correlation coefficients.
 HDI_Education2 <- HDI_Education %>%
   left_join(Density, HDI_Education, by = c("Country" = "Country"))
 
@@ -170,8 +172,7 @@ HDI_Education2 <- HDI_Education %>%
 
 ```{r}
 
-data(gapminder)
-
+#The data set 
 world_map2 <- maps::map("world", plot = FALSE, fill = TRUE) %>% st_as_sf()
 
 HDI_Education_map <- HDI_Education2 %>%
