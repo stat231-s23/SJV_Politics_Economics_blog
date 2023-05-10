@@ -377,10 +377,8 @@ This suggests that factors other than development, such as cultural and social n
 ## Findings:
 
   We found that there is a strong correlation between education and HDI. To find this correlation, we grouped by continent. Because several continents appear either above or below the line of best fit, there are regional factors at play in the relationship between education and HDI.
-
-	We also found that in order to understand literacy rate within a country, it is necessary to look at the regional context of that country. Thus, HDI - a measure of circumstances within a country - seems incommensurate with the task of understanding literacy rates in the world.
-	
-	Finally, even though HDI is considered to be a uniform measurement for development across the world, we found it does not address all aspects of development. As we discussed in the case for women empowerment, many countries with a high HDI score have a poor record in terms of indicators of women empowerment. 
+  We also found that in order to understand literacy rate within a country, it is necessary to look at the regional context of that country. Thus, HDI - a measure of circumstances within a country - seems incommensurate with the task of understanding literacy rates in the world.
+	 Finally, even though HDI is considered to be a uniform measurement for development across the world, we found it does not address all aspects of development. As we discussed in the case for women empowerment, many countries with a high HDI score have a poor record in terms of indicators of women empowerment. 
 
 ## Limitations:
 
