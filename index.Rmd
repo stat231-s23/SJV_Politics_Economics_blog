@@ -377,7 +377,7 @@ This suggests that factors other than development, such as cultural and social n
 * The education level column of the heatmap, specifically reflecting the metric of women's completion of secondary education, shows a positive correlation with HDI. In general, countries with higher HDI rankings tend to have higher rates of women completing secondary education, indicating greater access to educational opportunities and greater potential for personal and professional growth. However, there are exceptions to this trend. One such exception is Ethiopia, which ranks relatively high in the HDI spectrum but has very low rates of women completing secondary education. This indicates that while Ethiopia has made progress in areas such as healthcare and income, it may face challenges in ensuring equal access to education for women.
 
 
-# Findings and Limitations:
+# Conclusion: Findings and Limitations
 
 ## Findings:
 
