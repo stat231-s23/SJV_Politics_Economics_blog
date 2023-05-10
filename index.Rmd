@@ -325,7 +325,7 @@ ggplot(Literacy_rate_cluster_map, aes(geometry=geom, fill = .cluster)) +
   labs(fill = "Cluster"
        , title = "Literacy rates vs. population density, colored by cluster",
        subtitle = "Years: 2021, 2023"
-       , caption = "Source: world bank data set") 
+       , caption = "Source: World Bank") 
 
 ```
 
